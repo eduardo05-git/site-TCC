@@ -3,7 +3,9 @@
   margin: 0;
   padding: 0;
 }
-html, body {
+
+html,
+body {
   height: 100%;
   font-family: "Inter", "Segoe UI", Tahoma, sans-serif;
   background: linear-gradient(180deg, #f6f9ff 0%, #f2f6fb 100%);
@@ -11,11 +13,12 @@ html, body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.6;
+
 }
 
 .home-landing {
   max-width: 1200px;
-  margin: 36px auto;
+  margin: 120px auto 36px;
   padding: 28px;
 }
 
@@ -28,12 +31,13 @@ html, body {
   padding: 56px 36px;
   border-radius: 20px;
   box-shadow: 0 10px 30px rgba(16, 35, 59, 0.06);
-  border: 1px solid rgba(16,35,59,0.04);
+  border: 1px solid rgba(16, 35, 59, 0.04);
 }
 
 .home-title-block {
   flex: 1 1 520px;
 }
+
 .home-title-block h1 {
   font-size: 2.6rem;
   line-height: 1.05;
@@ -43,8 +47,9 @@ html, body {
   letter-spacing: -0.3px;
   text-shadow: 0 2px 18px rgba(16, 52, 100, 0.03);
 }
+
 .gradient-text {
-  background: linear-gradient(90deg,#1976d2 0%, #4a90e2 60%);
+  background: linear-gradient(90deg, #1976d2 0%, #4a90e2 60%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -56,6 +61,7 @@ html, body {
   color: #335173;
   max-width: 46rem;
 }
+
 .home-tagline {
   font-style: italic;
   color: #55729a;
@@ -67,6 +73,7 @@ html, body {
   gap: 14px;
   margin-bottom: 18px;
 }
+
 .home-btn {
   display: inline-flex;
   align-items: center;
@@ -80,21 +87,25 @@ html, body {
   transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
   border: none;
 }
+
 .home-btn.primary {
   background: linear-gradient(180deg, #1976d2 0%, #1461b8 100%);
   color: #fff;
   box-shadow: 0 6px 18px rgba(25, 118, 210, 0.18);
 }
+
 .home-btn.primary:hover {
   transform: translateY(-3px);
   box-shadow: 0 12px 30px rgba(25, 118, 210, 0.18);
 }
+
 .home-btn.secondary {
   background: #eaf4ff;
   color: #1762b4;
-  border: 1px solid rgba(23,98,180,0.08);
-  box-shadow: 0 4px 12px rgba(23,98,180,0.06);
+  border: 1px solid rgba(23, 98, 180, 0.08);
+  box-shadow: 0 4px 12px rgba(23, 98, 180, 0.06);
 }
+
 .home-btn.secondary:hover {
   transform: translateY(-3px);
   background: #dfefff;
@@ -105,11 +116,12 @@ html, body {
   display: flex;
   justify-content: center;
 }
+
 .home-illustration {
   max-width: 100%;
   border-radius: 14px;
   box-shadow: 0 10px 30px rgba(16, 35, 59, 0.06);
-  border: 1px solid rgba(16,35,59,0.03);
+  border: 1px solid rgba(16, 35, 59, 0.03);
 }
 
 .home-stats {
@@ -120,31 +132,38 @@ html, body {
   color: #365072;
   align-items: center;
 }
-.home-stats > div {
+
+.home-stats>div {
   display: flex;
   align-items: baseline;
   gap: 8px;
 }
+
 .stat-num {
   font-weight: 800;
   font-size: 1.45rem;
   color: #0b66b2;
 }
+
 .stat-label {
   color: #516c89;
   font-size: 0.95rem;
 }
 
-.home-benefits, .home-vagas {
+.home-benefits,
+.home-vagas {
   margin-top: 64px;
   text-align: center;
 }
-.home-benefits h2, .home-vagas h2 {
+
+.home-benefits h2,
+.home-vagas h2 {
   font-size: 1.9rem;
   font-weight: 800;
   color: #0b3a73;
   margin-bottom: 18px;
 }
+
 .home-benefits-desc {
   max-width: 720px;
   margin: 0 auto 34px;
@@ -157,18 +176,21 @@ html, body {
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 20px;
 }
+
 .benefit-card {
-  background: linear-gradient(180deg,#ffffff 0%, #fbfdff 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
   padding: 22px;
   border-radius: 14px;
   box-shadow: 0 8px 26px rgba(13, 58, 115, 0.04);
   transition: transform 180ms ease, box-shadow 180ms ease;
   text-align: left;
 }
+
 .benefit-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 18px 40px rgba(13, 58, 115, 0.06);
 }
+
 .benefit-icon {
   display: inline-flex;
   align-items: center;
@@ -176,17 +198,19 @@ html, body {
   width: 44px;
   height: 44px;
   border-radius: 10px;
-  background: linear-gradient(180deg,#e8f2ff 0%, #dff0ff 100%);
+  background: linear-gradient(180deg, #e8f2ff 0%, #dff0ff 100%);
   color: #1161b4;
   font-size: 1.35rem;
   margin-bottom: 12px;
 }
+
 .benefit-card h3 {
   font-size: 1.05rem;
   font-weight: 700;
   color: #114f87;
   margin-bottom: 8px;
 }
+
 .benefit-card p {
   color: #597288;
   font-size: 0.95rem;
@@ -198,6 +222,7 @@ html, body {
   text-align: left;
   margin-top: 26px;
 }
+
 .vaga-card {
   display: flex;
   gap: 16px;
@@ -208,10 +233,12 @@ html, body {
   box-shadow: 0 8px 22px rgba(16, 35, 59, 0.04);
   transition: transform 180ms ease, box-shadow 180ms ease;
 }
+
 .vaga-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 22px 48px rgba(16, 35, 59, 0.06);
 }
+
 .vaga-icon {
   font-size: 1.6rem;
   width: 64px;
@@ -221,14 +248,16 @@ html, body {
   align-items: center;
   justify-content: center;
   color: #fff;
-  box-shadow: inset 0 -6px 18px rgba(0,0,0,0.06);
-  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: inset 0 -6px 18px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
+
 .vaga-card h3 {
   font-size: 1.05rem;
   color: #0d4f86;
   margin-bottom: 6px;
 }
+
 .vaga-card p {
   color: #425a75;
   font-size: 0.95rem;
@@ -237,51 +266,85 @@ html, body {
 
 .publicar-vaga {
   margin-top: 72px;
-  background: linear-gradient(90deg,#1762b4 0%, #0c3f76 100%);
+  background: linear-gradient(90deg, #1762b4 0%, #0c3f76 100%);
   color: #fff;
   padding: 54px 20px;
   border-radius: 14px;
   text-align: center;
   box-shadow: 0 14px 40px rgba(16, 35, 59, 0.09);
 }
+
 .publicar-card {
   max-width: 760px;
   margin: 0 auto;
 }
+
 .publicar-card h2 {
   font-size: 1.8rem;
   margin-bottom: 10px;
   font-weight: 800;
 }
+
 .publicar-card p {
   font-size: 1rem;
   margin-bottom: 18px;
-  color: rgba(255,255,255,0.92);
+  color: rgba(255, 255, 255, 0.92);
 }
+
 .publicar-card .home-btn.primary {
   background: #fff;
   color: #1762b4;
   padding: 12px 24px;
   border-radius: 10px;
-  box-shadow: 0 8px 26px rgba(23,98,180,0.16);
+  box-shadow: 0 8px 26px rgba(23, 98, 180, 0.16);
 }
+
 .publicar-card .home-btn.primary:hover {
   transform: translateY(-4px);
   background: #f5f8ff;
 }
 
 @media (max-width: 980px) {
-  .home-header { padding: 34px 22px; gap: 22px; }
-  .home-title-block h1 { font-size: 2.2rem; }
-  .home-image-block { order: -1; }
+  .home-header {
+    padding: 34px 22px;
+    gap: 22px;
+  }
+
+  .home-title-block h1 {
+    font-size: 2.2rem;
+  }
+
+  .home-image-block {
+    order: -1;
+  }
 }
+
 @media (max-width: 600px) {
-  .home-header { padding: 22px; }
-  .home-title-block h1 { font-size: 1.6rem; }
-  .home-actions { flex-direction: column; align-items: stretch; }
-  .home-btn { width: 100%; justify-content: center; }
-  .home-stats { gap: 18px; flex-wrap: wrap; }
-  .vaga-icon { width: 52px; height: 52px; }
+  .home-header {
+    padding: 22px;
+  }
+
+  .home-title-block h1 {
+    font-size: 1.6rem;
+  }
+
+  .home-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .home-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .home-stats {
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+
+  .vaga-icon {
+    width: 52px;
+    height: 52px;
+  }
 }
-
-

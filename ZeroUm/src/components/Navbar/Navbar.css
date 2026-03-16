@@ -1,113 +1,214 @@
-.navbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: linear-gradient(to right, #3882f1, #000000);
-    color: #fff;
-    padding: 0 32px;
-    height: 70px;
+.navbar-wrapper {
     position: fixed;
-    top: 0;
+    top: 20px;
     left: 0;
     width: 100%;
     z-index: 100;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.navbar {
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ffffff;
+    padding: 0 24px;
+    height: 70px;
+    width: 95%; /* Tornando a navbar mais larga */
+    max-width: 1200px; /* Limite de largura maior */
+    border-radius: 50px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    font-family: inherit;
 }
 
 .navbar-logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    padding-left: 26px;
-    letter-spacing: 2px;
+    font-size: 1.35rem;     /* Tamanho original */
+    font-weight: 900;       /* Mais grossa possível via font */
+    -webkit-text-stroke: 1px #0b3a73; /* Método "bruto" para engrossar ainda mais a letra */
+    padding-left: 10px;
+    letter-spacing: 0.5px;
+}
+
+.navbar-logo a {
+    text-decoration: none;
+    color: #0b3a73; /* Azul do projeto */
 }
 
 .navbar-list {
     display: flex;
     list-style: none;
     margin: 0;
-    padding-left: 135px;
-    gap: 24px;
+    padding: 0;
+    gap: 12px;
+    align-items: center;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
-.navbar-list a {
-    color: #fff;
+.nav-item {
+    border-radius: 30px;
+    transition: all 0.3s ease;
+}
+
+.nav-item a {
+    color: #425a75;
     text-decoration: none;
+    font-weight: 700;
     font-size: 1rem;
-    transition: color 0.2s;
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 30px;
+    transition: color 0.3s, background-color 0.3s;
 }
 
-.navbar-list a:hover {
-    color: #00bfff;
+.nav-item:hover a {
+    color: #0d4f86;
+    background-color: #f3f8ff;
+}
+
+/* Reference image active style - Agora Azul */
+.nav-item.active-link {
+    background-color: #e8f2ff; /* Fundo azul claro */
+}
+
+.nav-item.active-link a {
+    color: #0d4f86; /* Texto azul escuro */
+}
+
+.nav-badge {
+    background-color: #0d4f86; /* Azul escuro no badge */
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: bold;
+    height: 20px;
+    width: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-left: 4px;
 }
 
 .login-entre {
     display: flex;
     list-style: none;
     margin: 0;
-    padding-right: 50px;
+    padding: 0;
     gap: 12px;
 }
 
-.login-entrar {
-    color: #fff;
+.login-entre li a {
+    color: #425a75;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 10px 20px;
+    border-radius: 20px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.login-entre li a:hover {
+    background: #f3f8ff;
+    color: #0d4f86;
+}
+
+.login-entre li a.active-link {
+    background: #0d4f86; /* Azul escuro ativa */
+    color: #ffffff;
 }
 
 .right-section {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  position: relative;
-  padding-right: 50px; /* mantém o espaço igual o login-entre */
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+    padding-right: 14px;
 }
 
 .notification-bell {
-  font-size: 1.5rem;
-  cursor: pointer;
-  user-select: none;
-  color: #ffffff; /* sininho branco */
-  padding: 5px;
-  transition: box-shadow 0.3s ease, color 0.3s ease;
-  border-radius: 50%;
-  border: 2px solid transparent;
-  background-color: transparent; /* sem fundo */
+    font-size: 1.3rem;
+    cursor: pointer;
+    user-select: none;
+    color: #0b3a73;
+    padding: 10px;
+    border-radius: 50%;
+    background-color: #f3f8ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: background 0.3s ease;
 }
 
-.notification-bell:hover {
-  color: #ffffff; /* mantém branco */
-  box-shadow: 0 0 8px 4px rgba(0, 123, 255, 0.7); /* brilho azul ao redor */
-  border-color: rgba(0, 123, 255, 0.7); /* borda azul translúcida */
-  background-color: transparent; /* sem fundo */
+.notification-bell:hover, .notification-bell.active {
+    background-color: #dff0ff;
 }
 
-
+.badge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    background-color: #ef4444; /* Vermelho para atenção/notificações */
+    color: #ffffff;
+    font-size: 0.65rem;
+    font-weight: bold;
+    height: 18px;
+    width: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+}
 
 .notifications-popup {
-  position: absolute;
-  top: 40px; /* posiciona abaixo do sininho */
-  right: 0;
-  background: #ffffff; /* fundo branco */
-  color: #003366; /* azul escuro para o texto */
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3); /* sombra azulada */
-  width: 260px;
-  padding: 15px 20px;
-  z-index: 200;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 0.95rem;
-  border: 2px solid #007BFF; /* borda azul */
+    position: absolute;
+    top: 55px;
+    right: 0;
+    background: #ffffff;
+    color: #333;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    width: 320px;
+    padding: 10px 0;
+    z-index: 200;
+    border: 1px solid #e8f2ff;
 }
 
 .notifications-popup ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 .notifications-popup ul li {
-  padding: 10px 8px;
-  border-bottom: 1px solid #cce4ff; /* linha azul clara */
+    padding: 14px 20px;
+    border-bottom: 1px solid #f3f8ff;
+    font-size: 0.9rem;
+    color: #425a75;
+    transition: background 0.2s;
+}
+
+.notifications-popup ul li:hover {
+    background: #fdfefe;
 }
 
 .notifications-popup ul li:last-child {
-  border-bottom: none;
+    border-bottom: none;
 }
 
+@media (max-width: 860px) {
+    .navbar-list {
+        display: none;
+    }
+    .navbar {
+        width: 95%;
+        padding: 0 16px;
+    }
+}

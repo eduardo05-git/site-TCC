@@ -1,83 +1,160 @@
 .footer-container {
-  background: linear-gradient(90deg, #1e3c72 0%, #2a5298 100%);
-  color: #fff;
-  padding: 40px 0 10px 0;
+  background-color: #0c1a30; /* Fundo azul marinho bem escuro */
+  color: #f8fafc; /* Texto claro */
+  padding: 80px 4% 0 4%;
   margin-top: auto;
+  font-family: "Inter", "Segoe UI", sans-serif;
+  overflow: hidden; /* Importante para cortar o texto gigante na parte inferior */
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+
+  /* Truque para esticar 100% da tela ignorando o padding do parent */
   width: 100vw;
+  position: relative;
   left: 50%;
   right: 50%;
   margin-left: -50vw;
   margin-right: -50vw;
-  position: relative;
-  box-shadow: 0 -2px 10px rgba(30,60,114,0.1);
 }
 
-.footer-content {
-  display: flex;
-  justify-content: space-around;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  max-width: 1200px;
+/* Container do topo (Links e contatos) */
+.footer-top-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+  max-width: 1300px;
   margin: 0 auto;
-  padding-bottom: 20px;
-  gap: 24px;
+  margin-bottom: 80px;
 }
 
-.footer-section {
-  flex: 1 1 200px;
-  margin: 0 20px;
-  min-width: 180px;
+.footer-column {
+  display: flex;
+  flex-direction: column;
 }
 
-.footer-section h4 {
-  margin-bottom: 10px;
-  font-size: 1.2rem;
-  border-bottom: 1px solid #fff3;
-  padding-bottom: 5px;
+.footer-column h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 24px;
 }
 
-.footer-section a, .footer-section .icon-link {
-  color: #fff;
+.brand-column p {
+  color: #94a3b8;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  max-width: 320px;
+}
+
+.links-column a {
+  color: #cbd5e1;
   text-decoration: none;
-  margin: 0 8px;
+  font-size: 1rem;
+  margin-bottom: 12px;
+  transition: color 0.2s;
+  font-weight: 500;
+}
+
+.links-column a:hover {
+  color: #60a5fa; /* Azul claro brilhante no hover */
+}
+
+.contact-column .contact-link {
+  color: #cbd5e1;
+  text-decoration: none;
+  font-size: 0.95rem;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: color 0.2s;
+}
+
+.contact-column .contact-link:hover {
+  color: #60a5fa;
+}
+
+.social-links-grid a {
+  color: #cbd5e1;
+  text-decoration: none;
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: color 0.2s;
+}
+
+.social-links-grid a:hover {
+  color: #60a5fa;
+}
+
+.contact-link i, .social-links-grid i {
+  color: #475569;
   font-size: 1.1rem;
   transition: color 0.2s;
-  display: inline-flex;
+}
+
+.contact-link:hover i, .social-links-grid a:hover i {
+  color: #60a5fa;
+}
+
+/* Barrinha embaixo dos links, antes do nome gigante */
+.footer-bottom-bar {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding-bottom: 10px;
+  font-size: 0.85rem;
+  color: #64748b;
+  position: relative;
+  z-index: 2; /* Fica por cima do texto cortado se necessário */
 }
 
-.footer-section a:hover, .footer-section .icon-link:hover {
-  color: #ffd700;
-}
-
-.footer-bottom {
+/* O Nome Gigante do Fundo */
+.footer-giant-text {
+  font-size: 28vw; /* Escala baseada na largura da tela */
+  font-weight: 900;
+  color: #11233f; /* Azul sutil que atua como marca d'água */
+  line-height: 0.7; /* Corta a parte debaixo do texto */
   text-align: center;
-  font-size: 0.95rem;
-  border-top: 1px solid #fff3;
-  padding-top: 10px;
-  opacity: 0.8;
+  letter-spacing: -3vw;
+  margin-bottom: -5%; /* Puxa pra baixo o corte */
+  pointer-events: none;
+  user-select: none;
+  text-transform: lowercase;
 }
 
-.social-icons {
-  margin-top: 8px;
-}
-
-.social-icons a {
-  margin: 0 6px;
-  font-size: 1.5rem;
-  vertical-align: middle;
-}
-
-@media (max-width: 800px) {
-  .footer-content {
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
+/* Responsividade */
+@media (max-width: 1040px) {
+  .footer-top-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 60px 40px;
   }
-  .footer-section {
-    margin: 10px 0;
-    min-width: 0;
-    width: 100%;
+}
+
+@media (max-width: 650px) {
+  .footer-top-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
     text-align: center;
+  }
+  
+  .brand-column p {
+    margin: 0 auto;
+  }
+  
+  .contact-column .contact-link, .social-links-grid a {
+    justify-content: center;
+  }
+
+  .footer-bottom-bar {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .footer-giant-text {
+    font-size: 38vw; /* Aumenta na tela menor para o efeito persistir */
   }
 }

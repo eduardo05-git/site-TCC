@@ -38,7 +38,7 @@ function Cadastro() {
   return (
     <div className="cadastro-bg">
       <div className="cadastro-card">
-        <h2 className="cadastro-title">Junte-se ao ZeroUm</h2>
+        <h2 className="cadastro-title">Junte-se ao Neway</h2>
         <p className="cadastro-subtitle">Seu futuro começa aqui. Cadastre-se e conquiste suas oportunidades!</p>
 
         <form className="cadastro-form" onSubmit={handleSubmit}>

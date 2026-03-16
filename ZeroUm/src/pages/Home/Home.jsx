@@ -78,9 +78,9 @@ function Home() {
       </header>
 
       <section className="home-benefits" id="saiba-mais">
-        <h2>Por que o ZeroUm é o melhor para você?</h2>
+        <h2>Por que o Neway é o melhor para você?</h2>
         <p className="home-benefits-desc">
-          O ZeroUm conecta estudantes da Escola Brasilio Flores com empresas qualificadas, focando no seu crescimento profissional e aprendizado.
+          O Neway conecta estudantes da Escola Brasilio Flores com empresas qualificadas, focando no seu crescimento profissional e aprendizado.
         </p>
         <div className="benefits-list">
           <div className="benefit-card">
