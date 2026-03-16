@@ -1,146 +1,173 @@
-
 import './home.css';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 const vagasDestaque = [
   {
-    titulo: "Estágio em Desenvolvimento Web",
+    titulo: "Estágio Front-end React",
     empresa: "Tech Solutions",
-    descricao: "Desenvolvimento de aplicações web utilizando React e Node.js.",
-    requisitos: "Conhecimento em JavaScript, HTML, CSS. Desejável experiência com React.",
-    cor: "#2196f3",
-    icone: "💻"
+    descricao: "Junte-se ao nosso time ágil desenvolvendo interfaces incríveis de alta performance.",
+    requisitos: "JavaScript ES6, HTML5, CSS3. Mente criativa e facilidade com React.",
+    area: "Desenvolvimento",
+    icone: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+    )
   },
   {
     titulo: "Estágio em Marketing Digital",
-    empresa: "Marketing Pro",
-    descricao: "Auxiliar na criação de campanhas digitais e gestão de redes sociais.",
-    requisitos: "Conhecimento em SEO, Google Ads e redes sociais.",
-    cor: "#43a047",
-    icone: "📈"
+    empresa: "Growth Pro",
+    descricao: "Ajude marcas a quebrarem recordes com estratégias de tráfego pago e social media.",
+    requisitos: "Noções de SEO, Google Ads e ferramentas de análise. Muita criatividade.",
+    area: "Comunicação",
+    icone: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+    )
   },
   {
-    titulo: "Estágio em Design Gráfico",
-    empresa: "Creative Minds",
-    descricao: "Criação de peças gráficas para campanhas publicitárias e redes sociais.",
-    requisitos: "Conhecimento em Adobe Photoshop e Illustrator.",
-    cor: "#ab47bc",
-    icone: "🎨"
+    titulo: "Estágio em UI/UX Design",
+    empresa: "Creative Minds Studio",
+    descricao: "Desenho de protótipos encantadores com foco na jornada absurda do usuário.",
+    requisitos: "Domínio de Figma. Noções básicas de usabilidade. Paixão por cores.",
+    area: "Design",
+    icone: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>
+    )
   }
 ];
 
 function Home() {
   return (
-    <div className="home-landing">
-      <header className="home-header">
-        <div className="home-title-block">
-          <h1>
-            Encontre o <span className="gradient-text">estágio perfeito</span><br />
-            para sua carreira
+    <div className="home-modern-landing">
+      {/* 1. HERO VIBRANTE E DINÂMICO */}
+      <section className="hero-section">
+        <div className="hero-glow-bg"></div> {/* Efeito de vidro/Glow */}
+        
+        <div className="hero-content">
+          <div className="status-pill">
+            <span className="pulse-dot"></span> Vagas exclusivas da Escola Brasilio Flores de Azevedo
+          </div>
+          
+          <h1 className="hero-title">
+            Destrave a sua <br/>
+            <span className="text-gradient">Carreira Profissional</span>
           </h1>
-          <p className="home-subtitle">
-            Feito por alunos, para alunos — somos da Escola Brasilio Flores de Azevedo, em parceria com empresas especializadas em estágios que ajudam você a crescer.
-          </p>
-          <p className="home-tagline">
-            <em>"Seu futuro começa hoje! Estamos aqui para abrir portas." </em>
+          
+          <p className="hero-subtitle">
+            Feito por alunos, para alunos. Encontre estágios nas melhores empresas de tecnologia e destrave seu futuro ainda na escola.
           </p>
 
-          <div className="home-actions">
-            <a href="/vagas" className="home-btn primary">Buscar Vagas</a>
-            <a href="#saiba-mais" className="home-btn secondary">Saiba Mais</a>
+          <div className="hero-buttons">
+            <Link to="/vagas" className="btn-glow primary">Encontrar meu Estágio</Link>
+            <a href="#bento-benefits" className="btn-glow secondary">Explorar o Neway</a>
           </div>
 
-          <div className="home-stats">
-            <div>
-              <span className="stat-num">+90</span>
-              <span className="stat-label">vagas ativas</span>
-            </div>
-            <div>
-              <span className="stat-num">+40</span>
-              <span className="stat-label">empresas parceiras</span>
-            </div>
-            <div>
-              <span className="stat-num">95%</span>
-              <span className="stat-label">satisfação dos usuários</span>
-            </div>
+          <div className="hero-stats-row">
+            <div className="stat-pill"><strong>+90</strong> vagas vivas</div>
+            <div className="stat-pill"><strong>40+</strong> empresas parceiras</div>
+            <div className="stat-pill"><strong>95%</strong> de alunos empregados</div>
           </div>
         </div>
 
-        <div className="home-image-block">
-          <img
-            src="../img/foto.jpg"
-            alt="Jovens felizes encontrando estágio"
-            className="home-illustration"
-            loading="lazy"
-            width="600"
-          />
+        {/* Gráficos de "Caixas Flutuantes" subitituindo a velha imagem estática */}
+        <div className="hero-floating-elements">
+           <div className="float-card card-1"><span className="icon">🚀</span> Aceleração</div>
+           <div className="float-card card-2"><span className="icon">💼</span> Vagas Top-Tier</div>
+           <div className="float-card card-3"><span className="icon">🎯</span> Match Perfeito</div>
         </div>
-      </header>
+      </section>
 
-      <section className="home-benefits" id="saiba-mais">
-        <h2>Por que o Neway é o melhor para você?</h2>
-        <p className="home-benefits-desc">
-          O Neway conecta estudantes da Escola Brasilio Flores com empresas qualificadas, focando no seu crescimento profissional e aprendizado.
-        </p>
-        <div className="benefits-list">
-          <div className="benefit-card">
-            <span className="benefit-icon" role="img" aria-label="Alvo">🎯</span>
-            <h3>Vagas Personalizadas</h3>
-            <p>Ajustadas para suas habilidades e interesses, para você brilhar.</p>
+      {/* 2. POR QUE O NEWAY? - ESTILO BENTO GRID */}
+      <section className="bento-section" id="bento-benefits">
+        <div className="section-header center">
+          <h2>Mais do que um simples portal</h2>
+          <p>Desenvolvemos um sistema focado no sucesso de quem está começando.</p>
+        </div>
+
+        <div className="bento-grid">
+          {/* Item 1 - Grande Destaque Lateral */}
+          <div className="bento-item span-col-2 bg-gradient">
+            <div className="bento-content">
+              <h3>Match Ultra Personalizado</h3>
+              <p>O Neway não te joga em qualquer vaga. Lemos o seu <strong>Perfil</strong> e destacamos vagas perfeitas ajustadas às suas habilidades exclusivas.</p>
+            </div>
+            <div className="bento-icon-huge">🎯</div>
           </div>
-          <div className="benefit-card">
-            <span className="benefit-icon" role="img" aria-label="Empresa">🏢</span>
-            <h3>Empresas Qualificadas</h3>
-            <p>Parcerias com companhias que investem nos talentos do futuro.</p>
+
+          {/* Item 2 - Quadrado Normal */}
+          <div className="bento-item glass-panel">
+            <div className="bento-content">
+              <h3>Empresas Auditadas</h3>
+              <p>Só parceiros verificados que buscam talentos junior.</p>
+            </div>
           </div>
-          <div className="benefit-card">
-            <span className="benefit-icon" role="img" aria-label="Livro">📚</span>
-            <h3>Suporte Completo</h3>
-            <p>Dicas valiosas para você se destacar e crescer no processo seletivo.</p>
+
+          {/* Item 3 - Quadrado Normal com cor de marca */}
+          <div className="bento-item solid-blue">
+            <div className="bento-content">
+              <h3>Direto ao Ponto</h3>
+              <p>Processos seletivos sem enrolação, comunicação direta com o RH.</p>
+            </div>
           </div>
-          <div className="benefit-card">
-            <span className="benefit-icon" role="img" aria-label="Gráfico">📈</span>
-            <h3>Acompanhamento</h3>
-            <p>Apoio contínuo para sua evolução durante o estágio.</p>
+
+          {/* Item 4 - Comprido na base */}
+          <div className="bento-item span-col-3 soft-shadow">
+            <div className="bento-content horizontal">
+              <div className="icon">📚</div>
+              <div>
+                <h3>Material de Apoio</h3>
+                <p>Nós fornecemos todo suporte para montar seu currículo e treinar para entrevistas usando nossa base de conhecimento colaborativa.</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="home-vagas" id="vagas">
-        <h2>Vagas em destaque</h2>
-        <h4>Veja a vaga que melhor se encaixa com você!</h4>
-        <div className="vagas-list">
+      {/* 3. SHOWCASE DE VAGAS EM DESTAQUE */}
+      <section className="vagas-showcase-section">
+        <div className="section-header">
+          <h2>Vagas Pegando Fogo 🔥</h2>
+          <p>Oportunidades em destaque abertas essa semana.</p>
+        </div>
+
+        <div className="vagas-grid-modern">
           {vagasDestaque.map((vaga, idx) => (
-            <div className="vaga-card" key={idx}>
-              <span className="vaga-icon" style={{background: vaga.cor}}>{vaga.icone}</span>
-              <div>
+            <div className="vaga-modern-card" key={idx}>
+              <div className="vaga-card-header">
+                <div className="vaga-icon-wrap">{vaga.icone}</div>
+                <span className="vaga-area-tag">{vaga.area}</span>
+              </div>
+              
+              <div className="vaga-card-body">
                 <h3>{vaga.titulo}</h3>
-                <p><strong>Empresa:</strong> {vaga.empresa}</p>
-                <p><strong>descrição:</strong>{vaga.descricao}</p>
-                <p><strong>requisitos:</strong>{vaga.requisitos}</p>
+                <p className="vaga-company">{vaga.empresa}</p>
+                <p className="vaga-desc">{vaga.descricao}</p>
+                <div className="vaga-req">
+                  <strong>Requisitos Básicos:</strong>
+                  <span>{vaga.requisitos}</span>
+                </div>
+              </div>
+
+              <div className="vaga-card-footer">
+                <Link to="/vagas" className="btn-apply-ghost">Ver Detalhes</Link>
               </div>
             </div>
           ))}
         </div>
+        
+        <div className="view-all-wrapper">
+          <Link to="/vagas" className="btn-glow outline">Explorar Todas as Vagas</Link>
+        </div>
       </section>
 
-      <section className="publicar-vaga" id="publicar">
-  <div className="publicar-card">
-    <div className="publicar-conteudo">
-      <h2>É uma empresa? Publique sua vaga aqui!</h2>
-      <p>
-        Conecte-se com os melhores talentos da Escola Brasilio Flores de Azevedo. Preencha sua vaga com estagiários motivados e preparados!
-      </p>
-      <a href="/PubliqueSuaVaga" className="home-btn primary"> Publicar Vaga </a>
+      {/* 4. CTA BANNER (FOCO EM EMPRESAS) */}
+      <section className="cta-empresa-section">
+        <div className="cta-glass-box">
+          <h2>Seu próximo Prodígio está Aqui.</h2>
+          <p>Conecte-se diretamente com os talentos promissores e cheios de vontade de aprender da Escola Brasilio Flores de Azevedo.</p>
+          <Link to="/PubliqueSuaVaga" className="btn-glow white-glow">Publicar Vaga Grátis</Link>
+        </div>
+      </section>
+
     </div>
-  </div>
-</section>
-</div>
-
-          
-   
-
-    
   );
 }
 
