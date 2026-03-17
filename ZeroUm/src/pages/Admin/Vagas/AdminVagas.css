@@ -1,0 +1,133 @@
+.admin-vagas-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.admin-vagas-container h2 {
+  color: #1a1a1a;
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 5px;
+  letter-spacing: -0.5px;
+}
+
+.vagas-count {
+  color: #666;
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+}
+
+.vagas-table-wrapper {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.02);
+}
+
+.vagas-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.vagas-table th {
+  background-color: #f8f9fa;
+  color: #555;
+  font-weight: 700;
+  padding: 20px;
+  text-align: left;
+  border-bottom: 2px solid #edf2f7;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.vagas-table td {
+  padding: 20px;
+  border-bottom: 1px solid #edf2f7;
+  color: #333;
+  vertical-align: middle;
+}
+
+.vagas-table tr:last-child td {
+  border-bottom: none;
+}
+
+.vagas-table tr {
+  transition: background-color 0.2s ease;
+}
+
+.vagas-table tbody tr:hover {
+  background-color: #fcfcfc;
+}
+
+.text-truncate {
+  max-width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #666;
+}
+
+/* Status Badges */
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: inline-block;
+}
+
+.status-badge.pendente {
+  background-color: #fff3e0;
+  color: #f57c00;
+}
+
+.status-badge.rejeitada {
+  background-color: #ffebee;
+  color: #d32f2f;
+}
+
+.status-badge.aprovada {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+/* Buttons */
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.approve-btn, .reject-btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.approve-btn {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.approve-btn:hover {
+  background-color: #c8e6c9;
+  transform: translateY(-2px);
+}
+
+.reject-btn {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.reject-btn:hover {
+  background-color: #ffcdd2;
+  transform: translateY(-2px);
+}

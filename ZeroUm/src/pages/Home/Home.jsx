@@ -40,17 +40,17 @@ function Home() {
       {/* 1. HERO VIBRANTE E DINÂMICO */}
       <section className="hero-section">
         <div className="hero-glow-bg"></div> {/* Efeito de vidro/Glow */}
-        
+
         <div className="hero-content">
           <div className="status-pill">
             <span className="pulse-dot"></span> Vagas exclusivas da Escola Brasilio Flores de Azevedo
           </div>
-          
+
           <h1 className="hero-title">
-            Destrave a sua <br/>
+            Destrave a sua <br />
             <span className="text-gradient">Carreira Profissional</span>
           </h1>
-          
+
           <p className="hero-subtitle">
             Feito por alunos, para alunos. Encontre estágios nas melhores empresas de tecnologia e destrave seu futuro ainda na escola.
           </p>
@@ -69,9 +69,9 @@ function Home() {
 
         {/* Gráficos de "Caixas Flutuantes" subitituindo a velha imagem estática */}
         <div className="hero-floating-elements">
-           <div className="float-card card-1"><span className="icon">🚀</span> Aceleração</div>
-           <div className="float-card card-2"><span className="icon">💼</span> Vagas Top-Tier</div>
-           <div className="float-card card-3"><span className="icon">🎯</span> Match Perfeito</div>
+          <div className="float-card card-1"><span className="icon">🚀</span> Aceleração</div>
+          <div className="float-card card-2"><span className="icon">💼</span> Vagas Top-Tier</div>
+          <div className="float-card card-3"><span className="icon">🎯</span> Match Perfeito</div>
         </div>
       </section>
 
@@ -124,7 +124,7 @@ function Home() {
       {/* 3. SHOWCASE DE VAGAS EM DESTAQUE */}
       <section className="vagas-showcase-section">
         <div className="section-header">
-          <h2>Vagas Pegando Fogo 🔥</h2>
+          <h2>Oportunidades em Destaque: </h2>
           <p>Oportunidades em destaque abertas essa semana.</p>
         </div>
 
@@ -135,7 +135,7 @@ function Home() {
                 <div className="vaga-icon-wrap">{vaga.icone}</div>
                 <span className="vaga-area-tag">{vaga.area}</span>
               </div>
-              
+
               <div className="vaga-card-body">
                 <h3>{vaga.titulo}</h3>
                 <p className="vaga-company">{vaga.empresa}</p>
@@ -152,7 +152,7 @@ function Home() {
             </div>
           ))}
         </div>
-        
+
         <div className="view-all-wrapper">
           <Link to="/vagas" className="btn-glow outline">Explorar Todas as Vagas</Link>
         </div>

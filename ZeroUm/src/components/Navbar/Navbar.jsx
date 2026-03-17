@@ -61,6 +61,9 @@ function Navbar() {
           <li className={`nav-item ${getActiveClass('/perfil')}`}>
             <Link to="/perfil">Perfil</Link>
           </li>
+          <li className={`nav-item ${location.pathname.startsWith('/admin') ? 'active-link' : ''}`}>
+            <Link to="/admin">Admin</Link>
+          </li>
         </ul>
 
         <div className="right-section">

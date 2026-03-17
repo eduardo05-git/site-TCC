@@ -9,6 +9,9 @@ import Cadastro from "./pages/Login/Cadastro";
 import PublicarVaga from "./pages/PublicarVaga/PubliqueSuaVaga";
 import PerfilVisualizacao from "./pages/Perfil/PerfilVisualizacao"; 
 import UserList from './pages/UserList/UserList.jsx'; 
+import AdminRoute from './components/AdminRoute/AdminRoute.jsx';
+import Dashboard from './pages/Admin/Dashboard/Dashboard.jsx';
+import AdminVagas from './pages/Admin/Vagas/AdminVagas.jsx';
 
 
 function PerfilVisualizacaoWrapper() {
@@ -44,7 +47,11 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Cadastro />} />
         <Route path="/publiquesuavaga" element={<PublicarVaga />} />
-        <Route path="/admin/usuarios" element={<UserList />} />
+        
+        {/* Admin Routes with Simple Access Control */}
+        <Route path="/admin" element={<AdminRoute><Dashboard /></AdminRoute>} />
+        <Route path="/admin/usuarios" element={<AdminRoute><UserList /></AdminRoute>} />
+        <Route path="/admin/vagas" element={<AdminRoute><AdminVagas /></AdminRoute>} />
       </Routes>
       <Footer />
     </Router>

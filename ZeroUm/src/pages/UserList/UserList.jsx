@@ -67,55 +67,57 @@ function UserList() {
             <h2>Gerenciamento de Usuários </h2>
             <p className="user-count">Total de usuários: {users.length}</p>
             
-            <table className="users-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nome</th>
-                        <th>Email</th>
-                        <th>Nível</th>
-                        <th>Status</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {users.length === 0 ? (
-                        <tr><td colSpan="6" style={{textAlign: 'center'}}>Nenhum usuário cadastrado.</td></tr>
-                    ) : (
-                        users.map(user => (
-                            <tr key={user.id}>
-                                <td>{user.id}</td>
-                                
-                                {editingUser === user.id ? (
-                                   
-                                    <>
-                                        <td><input name="nome" type="text" value={formData.nome || ''} onChange={handleChange} /></td>
-                                        <td><input name="email" type="text" value={formData.email || ''} onChange={handleChange} /></td>
-                                        <td><input name="nivelAcesso" type="text" value={formData.nivelAcesso || ''} onChange={handleChange} /></td>
-                                        <td><input name="statusUsuario" type="text" value={formData.statusUsuario || ''} onChange={handleChange} /></td>
-                                        <td className="action-buttons">
-                                            <button className="save-btn" onClick={() => handleUpdate(user.id)}>Salvar</button>
-                                            <button className="cancel-btn" onClick={() => setEditingUser(null)}>Cancelar</button>
-                                        </td>
-                                    </>
-                                ) : (
+            <div className="users-table-wrapper">
+                <table className="users-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Nível</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {users.length === 0 ? (
+                            <tr><td colSpan="6" style={{textAlign: 'center'}}>Nenhum usuário cadastrado.</td></tr>
+                        ) : (
+                            users.map(user => (
+                                <tr key={user.id}>
+                                    <td>{user.id}</td>
                                     
-                                    <>
-                                        <td>{user.nome}</td>
-                                        <td>{user.email}</td>
-                                        <td>{user.nivelAcesso}</td>
-                                        <td>{user.statusUsuario}</td>
-                                        <td className="action-buttons">
-                                            <button className="edit-btn" onClick={() => startEdit(user)}>Editar</button>
-                                            <button className="delete-btn" onClick={() => handleDelete(user.id)}>Excluir</button>
-                                        </td>
-                                    </>
-                                )}
-                            </tr>
-                        ))
-                    )}
-                </tbody>
-            </table>
+                                    {editingUser === user.id ? (
+                                       
+                                        <>
+                                            <td><input name="nome" type="text" value={formData.nome || ''} onChange={handleChange} /></td>
+                                            <td><input name="email" type="text" value={formData.email || ''} onChange={handleChange} /></td>
+                                            <td><input name="nivelAcesso" type="text" value={formData.nivelAcesso || ''} onChange={handleChange} /></td>
+                                            <td><input name="statusUsuario" type="text" value={formData.statusUsuario || ''} onChange={handleChange} /></td>
+                                            <td className="action-buttons">
+                                                <button className="save-btn" onClick={() => handleUpdate(user.id)}>Salvar</button>
+                                                <button className="cancel-btn" onClick={() => setEditingUser(null)}>Cancelar</button>
+                                            </td>
+                                        </>
+                                    ) : (
+                                        
+                                        <>
+                                            <td>{user.nome}</td>
+                                            <td>{user.email}</td>
+                                            <td>{user.nivelAcesso}</td>
+                                            <td>{user.statusUsuario}</td>
+                                            <td className="action-buttons">
+                                                <button className="edit-btn" onClick={() => startEdit(user)}>Editar</button>
+                                                <button className="delete-btn" onClick={() => handleDelete(user.id)}>Excluir</button>
+                                            </td>
+                                        </>
+                                    )}
+                                </tr>
+                            ))
+                        )}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 }
