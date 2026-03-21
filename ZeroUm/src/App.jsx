@@ -1,18 +1,19 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
+import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
+import Welcome from "./pages/Welcome/Welcome";
 import Home from "./pages/Home/Home";
 import Vagas from "./pages/Vagas/Vagas";
 import Perfil from "./pages/Perfil/Perfil";
 import Login from "./pages/Login/Login";
 import Cadastro from "./pages/Login/Cadastro";
 import PublicarVaga from "./pages/PublicarVaga/PubliqueSuaVaga";
-import PerfilVisualizacao from "./pages/Perfil/PerfilVisualizacao"; 
-import UserList from './pages/UserList/UserList.jsx'; 
+import PerfilVisualizacao from "./pages/Perfil/PerfilVisualizacao";
+import UserList from './pages/UserList/UserList.jsx';
 import AdminRoute from './components/AdminRoute/AdminRoute.jsx';
 import Dashboard from './pages/Admin/Dashboard/Dashboard.jsx';
 import AdminVagas from './pages/Admin/Vagas/AdminVagas.jsx';
-
 
 function PerfilVisualizacaoWrapper() {
   const location = useLocation();
@@ -34,26 +35,109 @@ function PerfilVisualizacaoWrapper() {
   );
 }
 
+// Layout com Navbar e Footer (apenas para rotas autenticadas)
+function LayoutComNavbar({ children }) {
+  return (
+    <>
+      <Navbar />
+      {children}
+      <Footer />
+    </>
+  );
+}
+
 function App() {
   return (
     <Router>
-      <Navbar />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/vagas" element={<Vagas />} />
-        <Route path="/perfil" element={<Perfil />} />
-        
-        <Route path="/perfil-visualizacao" element={<PerfilVisualizacaoWrapper />} />
-        <Route path="/login" element={<Login />} />
+        {/* Rotas públicas — sem Navbar/Footer */}
+        <Route path="/welcome" element={<Welcome />} />
         <Route path="/cadastro" element={<Cadastro />} />
-        <Route path="/publiquesuavaga" element={<PublicarVaga />} />
-        
-        {/* Admin Routes with Simple Access Control */}
-        <Route path="/admin" element={<AdminRoute><Dashboard /></AdminRoute>} />
-        <Route path="/admin/usuarios" element={<AdminRoute><UserList /></AdminRoute>} />
-        <Route path="/admin/vagas" element={<AdminRoute><AdminVagas /></AdminRoute>} />
+        <Route path="/login" element={<Login />} />
+
+        {/* Redireciona raiz para /welcome se não logado */}
+        <Route
+          path="/"
+          element={
+            <PrivateRoute>
+              <LayoutComNavbar>
+                <Home />
+              </LayoutComNavbar>
+            </PrivateRoute>
+          }
+        />
+
+        {/* Rotas protegidas */}
+        <Route
+          path="/vagas"
+          element={
+            <PrivateRoute>
+              <LayoutComNavbar>
+                <Vagas />
+              </LayoutComNavbar>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/perfil"
+          element={
+            <PrivateRoute>
+              <LayoutComNavbar>
+                <Perfil />
+              </LayoutComNavbar>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/perfil-visualizacao"
+          element={
+            <PrivateRoute>
+              <LayoutComNavbar>
+                <PerfilVisualizacaoWrapper />
+              </LayoutComNavbar>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/publiquesuavaga"
+          element={
+            <PrivateRoute>
+              <LayoutComNavbar>
+                <PublicarVaga />
+              </LayoutComNavbar>
+            </PrivateRoute>
+          }
+        />
+
+        {/* Rotas admin (protegidas pelo AdminRoute) */}
+        <Route
+          path="/admin"
+          element={
+            <PrivateRoute>
+              <AdminRoute><Dashboard /></AdminRoute>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/admin/usuarios"
+          element={
+            <PrivateRoute>
+              <AdminRoute><UserList /></AdminRoute>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/admin/vagas"
+          element={
+            <PrivateRoute>
+              <AdminRoute><AdminVagas /></AdminRoute>
+            </PrivateRoute>
+          }
+        />
+
+        {/* Qualquer rota desconhecida → welcome */}
+        <Route path="*" element={<Navigate to="/welcome" replace />} />
       </Routes>
-      <Footer />
     </Router>
   );
 }

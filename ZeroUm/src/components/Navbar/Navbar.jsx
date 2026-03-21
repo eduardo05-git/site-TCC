@@ -1,20 +1,37 @@
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './Navbar.css';
 
 function Navbar() {
   const [showNotifications, setShowNotifications] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const user = JSON.parse(localStorage.getItem('user') || 'null');
 
   function getActiveClass(path) {
     return location.pathname === path ? 'active-link' : '';
   }
 
+  function handleLogout() {
+    localStorage.removeItem('user');
+    localStorage.removeItem('isAdmin');
+    navigate('/welcome');
+  }
+
   function LoginCadastro() {
+    if (user) {
+      return (
+        <div className="login-entrar">
+          <span className="navbar-user-nome">{user.nome?.split(' ')[0]}</span>
+          <button className="navbar-logout-btn" onClick={handleLogout}>Sair</button>
+        </div>
+      );
+    }
     return (
       <div className="login-entrar">
         <ul className="login-entre">
-          <li><Link to="/login" className={getActiveClass('/login')}>Login</Link></li>
+          <li><Link to="/welcome" className={getActiveClass('/welcome')}>Login</Link></li>
           <li><Link to="/cadastro" className={getActiveClass('/cadastro')}>Cadastro</Link></li>
         </ul>
       </div>
