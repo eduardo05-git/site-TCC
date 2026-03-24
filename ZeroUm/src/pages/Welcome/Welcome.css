@@ -826,65 +826,102 @@
 
 .wlc-dot.active { width: 22px; background: rgba(255,255,255,.85); }
 
-/* ── Estudante ── */
-.wlc-student-wrap {
+/* ── Card central — vagas em destaque ── */
+.wlc-center-card {
     position: absolute;
-    bottom: -18%;
-    left: 50%;
-    transform: translateX(-50%);
+    inset: 0;
+    margin: auto;
+    height: fit-content;
     z-index: 3;
-    width: auto;
-    height: 130vh;
+    width: min(680px, 72%);
+    background: rgba(15, 12, 48, 0.7);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-radius: 32px;
+    border: 1px solid rgba(255,255,255,0.14);
+    padding: 44px;
     display: flex;
-    align-items: flex-end;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow:
+        0 40px 80px rgba(0,0,0,0.5),
+        0 0 0 1px rgba(255,255,255,0.05) inset;
+    animation: fadeUp .65s cubic-bezier(.22,.68,0,1.05) .1s both;
+}
+
+.wlc-cc-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+.wlc-cc-header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.55);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.wlc-cc-header-count {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.3);
+}
+
+.wlc-cc-vaga {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: rgba(255,255,255,0.055);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 28px;
+    transition: background .2s, border-color .2s;
+    cursor: default;
+}
+
+.wlc-cc-vaga:hover {
+    background: rgba(255,255,255,0.09);
+    border-color: rgba(255,255,255,0.15);
+}
+
+.wlc-cc-vaga-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
     justify-content: center;
-    pointer-events: none;
+    flex-shrink: 0;
 }
 
-/* Halo de luz — brilho suave atrás da figura */
-.wlc-student-glow {
-    position: absolute;
-    bottom: -30px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 480px;
-    height: 480px;
-    border-radius: 50%;
-    background: radial-gradient(
-        ellipse at center,
-        rgba(129,140,248,.45) 0%,
-        rgba(99,102,241,.2) 40%,
-        transparent 70%
-    );
-    pointer-events: none;
+.wlc-cc-vaga-info { flex: 1; min-width: 0; }
+
+.wlc-cc-vaga-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 6px;
 }
 
-/* Reflexo no chão */
-.wlc-student-glow::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 220px;
-    height: 30px;
-    border-radius: 50%;
-    background: rgba(99,102,241,.3);
-    filter: blur(18px);
+.wlc-cc-vaga-company {
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.4);
 }
 
-.wlc-student-img {
-    position: relative;
-    z-index: 1;
-    height: 130vh;
-    width: auto;
-    max-width: none;
-    display: block;
-    animation: fadeUp .85s cubic-bezier(.22,.68,0,1.05) .1s both;
-    filter:
-        drop-shadow(-10px 0 32px rgba(99,102,241,.32))
-        drop-shadow(10px 0 32px rgba(99,102,241,.22))
-        drop-shadow(0 -8px 40px rgba(129,140,248,.25));
+.wlc-cc-tag {
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 8px 18px;
+    border-radius: 999px;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 /* ══════════════════════════════════════════
@@ -896,9 +933,10 @@
     .wlc-left  { width: 100%; min-width: unset; padding: 32px 32px 44px; }
     .wlc-logo  { margin-bottom: 32px; }
 
-    .wlc-student-wrap { width: 42%; }
-    .wlc-student-img  { max-height: 320px; }
-    .wlc-student-glow { width: 260px; height: 260px; }
+    .wlc-center-card { width: 260px; padding: 18px; gap: 10px; }
+    .wlc-cc-vaga { padding: 12px; gap: 10px; }
+    .wlc-cc-vaga-icon { width: 34px; height: 34px; }
+    .wlc-cc-vaga-title { font-size: 0.78rem; }
 
     .wlc-card-chart  { top: 10%; left: 2%; width: 170px; }
     .wlc-card-hired  { top: 10%; right: 2%; width: 148px; }

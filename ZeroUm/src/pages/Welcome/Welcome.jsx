@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import estudante2 from '../../assets/estudante2.png';
 import './Welcome.css';
 
 const perfis = [
@@ -66,11 +65,21 @@ export default function Welcome() {
 
     async function handleLogin(e) {
         e.preventDefault(); setLoading(true); setError('');
+
+        if (perfil.tipo === 'EMPRESA') {
+            navigate('/empresa');
+            return;
+        }
+        if (perfil.tipo === 'ADMINISTRADOR') {
+            navigate('/admin-panel');
+            return;
+        }
+
         try {
             const res = await axios.post(API_LOGIN_URL, { email, senha, nivelAcesso: perfil.tipo });
             if (res.status === 200 && res.data) {
                 localStorage.setItem('user', JSON.stringify(res.data));
-                if (perfil.tipo === 'ADMINISTRADOR') { localStorage.setItem('isAdmin', 'true'); navigate('/admin'); }
+                if (perfil.tipo === 'ADMINISTRADOR') { localStorage.setItem('isAdmin', 'true'); navigate('/admin-panel'); }
                 else navigate('/');
             }
         } catch (err) {
@@ -89,12 +98,6 @@ export default function Welcome() {
 
                 {/* Logo */}
                 <div className="wlc-logo">
-                    <div className="wlc-logo-mark">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"
-                                stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                    </div>
                     <span className="wlc-logo-nome">Neway</span>
                 </div>
 
@@ -125,7 +128,7 @@ export default function Welcome() {
                                             <strong>{p.label}</strong>
                                             <small>{p.descricao}</small>
                                         </span>
-                                        <svg className="wlc-card-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                        <svg className="wlc-card-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                             <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                         </svg>
                                     </button>
@@ -231,10 +234,48 @@ export default function Welcome() {
                     {[0,1,2,3,4,5].map(i => <div key={i} className="wlc-stair" style={{ '--i': i }} />)}
                 </div>
 
-                {/* ── Estudante — centro, grande ── */}
-                <div className="wlc-student-wrap">
-                    <div className="wlc-student-glow" />
-                    <img src={estudante2} alt="Estudante" className="wlc-student-img" />
+                {/* ── Vagas em destaque — centro ── */}
+                <div className="wlc-center-card">
+                    <div className="wlc-cc-header">
+                        <div className="wlc-cc-header-left">
+                            <span className="wlc-live-dot" />
+                            Vagas em destaque
+                        </div>
+                        <span className="wlc-cc-header-count">90+ abertas</span>
+                    </div>
+
+                    <div className="wlc-cc-vaga">
+                        <div className="wlc-cc-vaga-icon" style={{background:'rgba(37,99,235,0.25)',color:'#93c5fd'}}>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><polyline points="16 18 22 12 16 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><polyline points="8 6 2 12 8 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                        </div>
+                        <div className="wlc-cc-vaga-info">
+                            <p className="wlc-cc-vaga-title">Estágio Front-end React</p>
+                            <p className="wlc-cc-vaga-company">Tech Solutions · São Paulo</p>
+                        </div>
+                        <span className="wlc-cc-tag" style={{background:'rgba(37,99,235,0.2)',color:'#93c5fd'}}>Dev</span>
+                    </div>
+
+                    <div className="wlc-cc-vaga">
+                        <div className="wlc-cc-vaga-icon" style={{background:'rgba(124,58,237,0.25)',color:'#c4b5fd'}}>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 19l7-7 3 3-7 7-3-3z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                        </div>
+                        <div className="wlc-cc-vaga-info">
+                            <p className="wlc-cc-vaga-title">Estágio UI/UX Design</p>
+                            <p className="wlc-cc-vaga-company">Creative Minds · Campinas</p>
+                        </div>
+                        <span className="wlc-cc-tag" style={{background:'rgba(124,58,237,0.2)',color:'#c4b5fd'}}>Design</span>
+                    </div>
+
+                    <div className="wlc-cc-vaga">
+                        <div className="wlc-cc-vaga-icon" style={{background:'rgba(5,150,105,0.25)',color:'#6ee7b7'}}>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><line x1="18" y1="20" x2="18" y2="10" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="12" y1="20" x2="12" y2="4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="6" y1="20" x2="6" y2="14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+                        </div>
+                        <div className="wlc-cc-vaga-info">
+                            <p className="wlc-cc-vaga-title">Estágio em Marketing Digital</p>
+                            <p className="wlc-cc-vaga-company">Growth Pro · Remoto</p>
+                        </div>
+                        <span className="wlc-cc-tag" style={{background:'rgba(5,150,105,0.2)',color:'#6ee7b7'}}>Mkt</span>
+                    </div>
                 </div>
 
                 {/* ── Cards ao redor ── */}

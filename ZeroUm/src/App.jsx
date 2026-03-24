@@ -14,6 +14,8 @@ import UserList from './pages/UserList/UserList.jsx';
 import AdminRoute from './components/AdminRoute/AdminRoute.jsx';
 import Dashboard from './pages/Admin/Dashboard/Dashboard.jsx';
 import AdminVagas from './pages/Admin/Vagas/AdminVagas.jsx';
+import Empresa from './pages/Empresa/Empresa.jsx';
+import AdminPanel from './pages/Admin/AdminPanel/AdminPanel.jsx';
 
 function PerfilVisualizacaoWrapper() {
   const location = useLocation();
@@ -108,6 +110,12 @@ function App() {
             </PrivateRoute>
           }
         />
+
+        {/* Portal da Empresa — sem autenticação */}
+        <Route path="/empresa" element={<Empresa />} />
+
+        {/* Painel Admin unificado — sem autenticação de role */}
+        <Route path="/admin-panel" element={<AdminPanel />} />
 
         {/* Rotas admin (protegidas pelo AdminRoute) */}
         <Route
