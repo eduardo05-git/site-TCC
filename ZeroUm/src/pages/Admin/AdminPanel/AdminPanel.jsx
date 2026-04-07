@@ -51,10 +51,12 @@ export default function AdminPanel() {
       .catch(err => console.error(err));
   }
 
-  function handleDelete(id) {
-    if (!window.confirm(`Excluir usuário ID ${id}?`)) return;
-    axios.delete(`${API_BASE_URL}/${id}`)
-      .then(() => setUsers(prev => prev.filter(u => u.id !== id)))
+  function handleToggleStatus(user) {
+    const novoStatus = user.statusUsuario === 'ATIVO' ? 'INATIVO' : 'ATIVO';
+    const acao = novoStatus === 'INATIVO' ? 'desativar' : 'reativar';
+    if (!window.confirm(`Tem certeza que deseja ${acao} o usuário ${user.nome}?`)) return;
+    axios.put(`${API_BASE_URL}/${user.id}`, { statusUsuario: novoStatus })
+      .then(() => setUsers(prev => prev.map(u => u.id === user.id ? { ...u, statusUsuario: novoStatus } : u)))
       .catch(err => console.error(err));
   }
 
@@ -154,7 +156,7 @@ export default function AdminPanel() {
                   </div>
                   <div>
                     <p className="adm-action-title">Gerenciar Usuários</p>
-                    <p className="adm-action-sub">Edite e exclua contas</p>
+                    <p className="adm-action-sub">Edite e ative/desative contas</p>
                   </div>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </button>
@@ -250,7 +252,9 @@ export default function AdminPanel() {
                               <td><span className={`adm-status-badge ${user.statusUsuario === 'ATIVO' ? 'ativo' : 'inativo'}`}>{user.statusUsuario}</span></td>
                               <td className="adm-td-actions">
                                 <button className="adm-btn-edit"   onClick={() => startEdit(user)}>Editar</button>
-                                <button className="adm-btn-delete" onClick={() => handleDelete(user.id)}>Excluir</button>
+                                <button className="adm-btn-delete" onClick={() => handleToggleStatus(user)}>
+                                  {user.statusUsuario === 'ATIVO' ? 'Desativar' : 'Ativar'}
+                                </button>
                               </td>
                             </>
                           )}

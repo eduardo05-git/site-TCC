@@ -1,12 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './Perfil.css';
 import { DropzoneArea } from './DropzoneArea';
 
+const API_BASE_URL = 'http://localhost:8080/api/v1/usuario';
+
 function Perfil() {
+  const usuarioLogado = JSON.parse(localStorage.getItem('user') || '{}');
+
+  const [nome, setNome] = useState(usuarioLogado.nome || '');
+  const [email, setEmail] = useState(usuarioLogado.email || '');
   const [links, setLinks] = useState('');
-  const [bio, setBio] = useState('Sou um estudante apaixonado por tecnologia, buscando minha primeira oportunidade de estágio como Desenvolvedor Fullstack. Tenho conhecimentos em React, Node.js e banco de dados.');
-  
+  const [bio, setBio] = useState('');
+  const [saving, setSaving] = useState(false);
+  const [feedback, setFeedback] = useState('');
+
   // Estado para as habilidades
   const [skills, setSkills] = useState(['JavaScript', 'React', 'CSS', 'HTML']);
   const [newSkill, setNewSkill] = useState('');
@@ -27,11 +36,26 @@ function Perfil() {
     setSkills(skills.filter(skill => skill !== skillToRemove));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    navigate('/perfil-visualizacao', {
-      state: { links },
-    });
+    if (!usuarioLogado.id) {
+      setFeedback('Usuário não identificado. Faça login novamente.');
+      return;
+    }
+    setSaving(true);
+    setFeedback('');
+    try {
+      const dadosAtualizados = { nome, email };
+      const response = await axios.put(`${API_BASE_URL}/${usuarioLogado.id}`, dadosAtualizados);
+      localStorage.setItem('user', JSON.stringify({ ...usuarioLogado, ...response.data }));
+      setFeedback('Perfil salvo com sucesso!');
+      navigate('/perfil-visualizacao', { state: { links } });
+    } catch (err) {
+      setFeedback('Erro ao salvar. Verifique o servidor.');
+      console.error(err);
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -120,7 +144,25 @@ function Perfil() {
           {/* Área Principal (Formulários e Bio) */}
           <main className="perfil-content">
             <form className="perfil-form" onSubmit={handleSubmit}>
-              
+
+              {feedback && (
+                <p style={{ color: feedback.includes('sucesso') ? '#4ade80' : '#f87171', marginBottom: '12px' }}>
+                  {feedback}
+                </p>
+              )}
+
+              <div className="perfil-section">
+                <h2>Dados da Conta</h2>
+                <div className="perfil-field">
+                  <label>Nome</label>
+                  <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} placeholder="Seu nome completo" />
+                </div>
+                <div className="perfil-field">
+                  <label>E-mail</label>
+                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="seu@email.com" />
+                </div>
+              </div>
+
               <div className="perfil-section">
                 <h2>Sobre Mim</h2>
                 <div className="perfil-field">
@@ -154,7 +196,9 @@ function Perfil() {
               </div>
 
               <div className="perfil-actions">
-                <button type="submit" className="btn-save-perfil">Salvar Alterações</button>
+                <button type="submit" className="btn-save-perfil" disabled={saving}>
+                  {saving ? 'Salvando...' : 'Salvar Alterações'}
+                </button>
               </div>
 
             </form>

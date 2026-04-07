@@ -49,15 +49,13 @@ function UserList() {
     };
     
     
-    const handleDelete = (id) => {
-        if (window.confirm(`Tem certeza que deseja excluir o usuário ID ${id}?`)) {
-            axios.delete(`${API_BASE_URL}/${id}`)
-                .then(() => {
-                    alert('Usuário excluído com sucesso!');
-                    fetchUsers(); 
-                })
-                .catch(error => console.error("Erro ao excluir:", error));
-        }
+    const handleToggleStatus = (user) => {
+        const novoStatus = user.statusUsuario === 'ATIVO' ? 'INATIVO' : 'ATIVO';
+        const acao = novoStatus === 'INATIVO' ? 'desativar' : 'reativar';
+        if (!window.confirm(`Tem certeza que deseja ${acao} o usuário ${user.nome}?`)) return;
+        axios.put(`${API_BASE_URL}/${user.id}`, { statusUsuario: novoStatus })
+            .then(() => fetchUsers())
+            .catch(error => console.error("Erro ao atualizar status:", error));
     };
 
 
@@ -108,7 +106,9 @@ function UserList() {
                                             <td>{user.statusUsuario}</td>
                                             <td className="action-buttons">
                                                 <button className="edit-btn" onClick={() => startEdit(user)}>Editar</button>
-                                                <button className="delete-btn" onClick={() => handleDelete(user.id)}>Excluir</button>
+                                                <button className="delete-btn" onClick={() => handleToggleStatus(user)}>
+                                                    {user.statusUsuario === 'ATIVO' ? 'Desativar' : 'Ativar'}
+                                                </button>
                                             </td>
                                         </>
                                     )}
