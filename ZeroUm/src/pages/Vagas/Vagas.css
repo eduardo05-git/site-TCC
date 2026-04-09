@@ -500,3 +500,15 @@
     transform: scale(0.98);
     opacity: 0.92;
 }
+
+.modal-btn-inscrever.sucesso {
+    background: #10b981;
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+    cursor: default;
+    pointer-events: none;
+}
+
+.modal-btn-inscrever.sucesso:hover {
+    transform: none;
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+}

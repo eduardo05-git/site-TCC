@@ -38,7 +38,7 @@ function Navbar() {
     );
   }
 
-  // Pop-up de notificações
+  
   function NotificationsPopup() {
     return (
       <div className="notifications-popup">
@@ -51,12 +51,12 @@ function Navbar() {
     );
   }
 
-  // Manipula o clique no sininho
+  
   function handleBellClick() {
     setShowNotifications(!showNotifications);
   }
 
-  // Número estático para a demonstração do badge na navbar parecida com a imagem
+ 
   const notifCount = 3;
 
   return (
@@ -79,7 +79,7 @@ function Navbar() {
             <Link to="/perfil">Perfil</Link>
           </li>
           <li className={`nav-item ${location.pathname.startsWith('/admin') ? 'active-link' : ''}`}>
-            <Link to="/admin">Admin</Link>
+            
           </li>
         </ul>
 

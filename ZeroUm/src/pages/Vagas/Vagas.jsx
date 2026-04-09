@@ -145,6 +145,12 @@ function VagaCard({ vaga, onVerDetalhes }) {
 }
 
 function ModalDetalhes({ vaga, onFechar }) {
+    const [candidatado, setCandidatado] = React.useState(false);
+
+    React.useEffect(() => {
+        if (vaga) setCandidatado(false);
+    }, [vaga]);
+
     if (!vaga) return null;
     return (
         <div className="modal-overlay" onClick={onFechar}>
@@ -183,7 +189,22 @@ function ModalDetalhes({ vaga, onFechar }) {
                     </ul>
                 </div>
 
-                <button className="modal-btn-inscrever">Se Candidatar</button>
+                <button 
+                    className={`modal-btn-inscrever ${candidatado ? "sucesso" : ""}`}
+                    onClick={() => setCandidatado(true)}
+                    disabled={candidatado}
+                >
+                    {candidatado ? (
+                        <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                            Candidatura Enviada
+                        </span>
+                    ) : (
+                        "Se Candidatar"
+                    )}
+                </button>
             </div>
         </div>
     );
