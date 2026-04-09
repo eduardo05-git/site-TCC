@@ -6,6 +6,30 @@ import { DropzoneArea } from './DropzoneArea';
 
 const API_BASE_URL = 'http://localhost:8080/api/v1/usuario';
 
+const minhasVagasMock = [
+  {
+    id: 1,
+    titulo: 'Estágio Front-end React',
+    empresa: 'Tech Solutions',
+    status: 'pendente',
+    data: '12/10/2026'
+  },
+  {
+    id: 2,
+    titulo: 'Estágio em Marketing Digital',
+    empresa: 'Growth Pro',
+    status: 'recusada',
+    data: '08/10/2026'
+  },
+  {
+    id: 3,
+    titulo: 'Estágio em UI/UX Design',
+    empresa: 'Creative Minds Studio',
+    status: 'entrou em contato',
+    data: '01/10/2026'
+  }
+];
+
 function Perfil() {
   const usuarioLogado = JSON.parse(localStorage.getItem('user') || '{}');
 
@@ -19,6 +43,7 @@ function Perfil() {
   // Estado para as habilidades
   const [skills, setSkills] = useState(['JavaScript', 'React', 'CSS', 'HTML']);
   const [newSkill, setNewSkill] = useState('');
+  const [activeTab, setActiveTab] = useState('dados');
 
   const navigate = useNavigate();
 
@@ -143,9 +168,27 @@ function Perfil() {
 
           {/* Área Principal (Formulários e Bio) */}
           <main className="perfil-content">
-            <form className="perfil-form" onSubmit={handleSubmit}>
+            <div className="perfil-tabs">
+              <button 
+                type="button"
+                className={`perfil-tab-btn ${activeTab === 'dados' ? 'ativo' : ''}`}
+                onClick={() => setActiveTab('dados')}
+              >
+                Meu Perfil
+              </button>
+              <button 
+                type="button"
+                className={`perfil-tab-btn ${activeTab === 'vagas' ? 'ativo' : ''}`}
+                onClick={() => setActiveTab('vagas')}
+              >
+                Minhas Vagas
+              </button>
+            </div>
 
-              {feedback && (
+            {activeTab === 'dados' ? (
+              <form className="perfil-form" onSubmit={handleSubmit}>
+
+                {feedback && (
                 <p style={{ color: feedback.includes('sucesso') ? '#4ade80' : '#f87171', marginBottom: '12px' }}>
                   {feedback}
                 </p>
@@ -202,6 +245,27 @@ function Perfil() {
               </div>
 
             </form>
+            ) : (
+              <div className="perfil-form">
+                <div className="perfil-section">
+                  <h2>Acompanhamento de Vagas</h2>
+                  <div className="minhas-vagas-grid">
+                    {minhasVagasMock.map(vaga => (
+                      <div key={vaga.id} className="minhas-vagas-card">
+                        <div className="card-vaga-top">
+                          <h3>{vaga.titulo}</h3>
+                          <span className={`badge-status status-${vaga.status.replace(/ /g, '-')}`}>
+                            {vaga.status}
+                          </span>
+                        </div>
+                        <p className="card-vaga-empresa">{vaga.empresa}</p>
+                        <p className="card-vaga-data">Candidatura em: {vaga.data}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
           </main>
         </div>
 
