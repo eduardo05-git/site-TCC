@@ -90,8 +90,19 @@ function UserList() {
                                         <>
                                             <td><input name="nome" type="text" value={formData.nome || ''} onChange={handleChange} /></td>
                                             <td><input name="email" type="text" value={formData.email || ''} onChange={handleChange} /></td>
-                                            <td><input name="nivelAcesso" type="text" value={formData.nivelAcesso || ''} onChange={handleChange} /></td>
-                                            <td><input name="statusUsuario" type="text" value={formData.statusUsuario || ''} onChange={handleChange} /></td>
+                                            <td>
+                                                <select name="nivelAcesso" value={formData.nivelAcesso || ''} onChange={handleChange}>
+                                                    <option value="ESTUDANTE">Estudante</option>
+                                                    <option value="EMPRESA">Empresa</option>
+                                                    <option value="ADMIN">Administrador</option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <select name="statusUsuario" value={formData.statusUsuario || ''} onChange={handleChange}>
+                                                    <option value="ATIVO">Ativo</option>
+                                                    <option value="INATIVO">Inativo</option>
+                                                </select>
+                                            </td>
                                             <td className="action-buttons">
                                                 <button className="save-btn" onClick={() => handleUpdate(user.id)}>Salvar</button>
                                                 <button className="cancel-btn" onClick={() => setEditingUser(null)}>Cancelar</button>

@@ -1,35 +1,30 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Cadastro.css';
-import InputField from '../../components/Cadastro/InputField';
+
+const API_URL = 'http://localhost:8080/api/v1/usuario';
 
 function Cadastro() {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
-  const [tipo, setTipo] = useState('estudante');
-  const navigate = useNavigate();
-
+  const [nivelAcesso, setNivelAcesso] = useState('ESTUDANTE');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-
-  const API_URL = "http://localhost:8080/api/v1/usuario";
+  const navigate = useNavigate();
 
   async function handleSubmit(e) {
     e.preventDefault();
     setIsLoading(true);
     setError('');
 
-    const novoUsuario = { nome, email, senha, tipo };
-
     try {
-      await axios.post(API_URL, novoUsuario);
-      alert('Cadastro realizado com sucesso! Faça login para continuar.');
+      await axios.post(API_URL, { nome, email, senha, nivelAcesso });
       navigate('/login');
     } catch (err) {
-      setError('Erro no cadastro. Verifique os dados ou se o email já existe.');
-      console.error("Erro no cadastro:", err);
+      setError('Erro no cadastro. Verifique os dados ou se o e-mail já existe.');
+      console.error('Erro no cadastro:', err);
     } finally {
       setIsLoading(false);
     }
@@ -38,74 +33,79 @@ function Cadastro() {
   return (
     <div className="cadastro-bg">
       <div className="cadastro-card">
-        <h2 className="cadastro-title">Junte-se ao Neway</h2>
-        <p className="cadastro-subtitle">Seu futuro começa aqui. Cadastre-se e conquiste suas oportunidades!</p>
+        <div className="cadastro-brand">
+          <span className="cadastro-brand-name">Neway</span>
+        </div>
+
+        <h2 className="cadastro-title">Crie sua conta</h2>
+        <p className="cadastro-subtitle">Seu futuro começa aqui</p>
 
         <form className="cadastro-form" onSubmit={handleSubmit}>
-          {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
-          
+          {error && (
+            <p style={{ color: '#ef4444', fontSize: '0.9rem', textAlign: 'center', margin: '-4px 0 4px' }}>
+              {error}
+            </p>
+          )}
+
           <label className="cadastro-label">
-            <span>Nome Completo</span>
-            <InputField 
+            <span>Nome completo</span>
+            <input
               className="cadastro-input"
-              type="text" 
+              type="text"
+              placeholder="Seu nome completo"
               value={nome}
               onChange={e => setNome(e.target.value)}
               required
               autoFocus
-              label="Digite seu nome"
-              id="nome-completo"
             />
           </label>
 
           <label className="cadastro-label">
-            <span>Email</span>
-            <InputField
-              className="cadastro-input" 
-              type="email" 
+            <span>E-mail</span>
+            <input
+              className="cadastro-input"
+              type="email"
+              placeholder="email@exemplo.com"
               value={email}
               onChange={e => setEmail(e.target.value)}
               required
-              label="email@exemplo.com"
-              id="email"
             />
           </label>
 
           <label className="cadastro-label">
             <span>Senha</span>
-            <InputField 
+            <input
               className="cadastro-input"
               type="password"
+              placeholder="Mínimo 6 caracteres"
               value={senha}
               onChange={e => setSenha(e.target.value)}
               required
-              label="Mínimo 6 caracteres"
               minLength={6}
-              id="senha"
             />
           </label>
 
           <label className="cadastro-label">
             <span>Tipo de usuário</span>
-            <select 
-              className="cadastro-input" 
-              value={tipo} 
-              onChange={e => setTipo(e.target.value)} 
+            <select
+              className="cadastro-input"
+              value={nivelAcesso}
+              onChange={e => setNivelAcesso(e.target.value)}
               required
             >
-              <option value="estudante">Estudante</option>
-              <option value="administrador">Administrador</option>
-              <option value="empresa">Empresa</option>
+              <option value="ESTUDANTE">Estudante</option>
+              <option value="EMPRESA">Empresa</option>
+              <option value="ADMIN">Administrador</option>
             </select>
           </label>
-          
+
           <button type="submit" className="cadastro-btn" disabled={isLoading}>
             {isLoading ? 'Cadastrando...' : 'Cadastrar'}
           </button>
         </form>
 
         <p className="link-login">
-          Já tem uma conta? <a href="/login">Entre aqui</a>
+          Já tem uma conta? <Link to="/login">Entre aqui</Link>
         </p>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+
 import axios from 'axios';
 import './Perfil.css';
 import { DropzoneArea } from './DropzoneArea';
@@ -45,8 +45,6 @@ function Perfil() {
   const [newSkill, setNewSkill] = useState('');
   const [activeTab, setActiveTab] = useState('dados');
 
-  const navigate = useNavigate();
-
   const handleAddSkill = (e) => {
     if (e.key === 'Enter' || e.type === 'click') {
       e.preventDefault();
@@ -74,7 +72,7 @@ function Perfil() {
       const response = await axios.put(`${API_BASE_URL}/${usuarioLogado.id}`, dadosAtualizados);
       localStorage.setItem('user', JSON.stringify({ ...usuarioLogado, ...response.data }));
       setFeedback('Perfil salvo com sucesso!');
-      navigate('/perfil-visualizacao', { state: { links } });
+      setTimeout(() => setFeedback(''), 3000);
     } catch (err) {
       setFeedback('Erro ao salvar. Verifique o servidor.');
       console.error(err);
@@ -102,8 +100,8 @@ function Perfil() {
         <div className="perfil-body">
           {/* Coluna Lateral (Informações Rápidas) */}
           <aside className="perfil-sidebar">
-            <h1 className="perfil-name">João Silva</h1>
-            <p className="perfil-role">Estudante de T.I. na Brasilio Flores</p>
+            <h1 className="perfil-name">{nome || 'Usuário'}</h1>
+            <p className="perfil-role">{usuarioLogado.nivelAcesso === 'ESTUDANTE' ? 'Estudante' : usuarioLogado.nivelAcesso === 'EMPRESA' ? 'Empresa' : usuarioLogado.nivelAcesso || 'Usuário'}</p>
 
             <div className="perfil-contact-info">
               <div className="info-item">
@@ -113,25 +111,7 @@ function Perfil() {
                     <polyline points="22,6 12,13 2,6"></polyline>
                   </svg>
                 </span>
-                <span>joao.silva@aluno.com.br</span>
-              </div>
-              <div className="info-item">
-                <span className="info-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
-                    <line x1="12" y1="18" x2="12.01" y2="18"></line>
-                  </svg>
-                </span>
-                <span>(11) 91234-5678</span>
-              </div>
-              <div className="info-item">
-                <span className="info-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                    <circle cx="12" cy="10" r="3"></circle>
-                  </svg>
-                </span>
-                <span>Barueri, SP</span>
+                <span>{email || '—'}</span>
               </div>
             </div>
             

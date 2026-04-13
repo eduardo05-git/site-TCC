@@ -32,7 +32,7 @@ const perfis = [
         ),
     },
     {
-        tipo: 'ADMINISTRADOR',
+        tipo: 'ADMIN',
         label: 'Administrador',
         descricao: 'Gerencie usuários, vagas e a plataforma.',
         cor: '#7c3aed',
@@ -70,7 +70,7 @@ export default function Welcome() {
             navigate('/empresa');
             return;
         }
-        if (perfil.tipo === 'ADMINISTRADOR') {
+        if (perfil.tipo === 'ADMIN') {
             navigate('/admin-panel');
             return;
         }
@@ -79,7 +79,7 @@ export default function Welcome() {
             const res = await axios.post(API_LOGIN_URL, { email, senha, nivelAcesso: perfil.tipo });
             if (res.status === 200 && res.data) {
                 localStorage.setItem('user', JSON.stringify(res.data));
-                if (perfil.tipo === 'ADMINISTRADOR') { localStorage.setItem('isAdmin', 'true'); navigate('/admin-panel'); }
+                if (perfil.tipo === 'ADMIN') { localStorage.setItem('isAdmin', 'true'); navigate('/admin-panel'); }
                 else navigate('/');
             }
         } catch (err) {
@@ -234,7 +234,13 @@ export default function Welcome() {
                     {[0,1,2,3,4,5].map(i => <div key={i} className="wlc-stair" style={{ '--i': i }} />)}
                 </div>
 
-                {/* ── Vagas em destaque — centro ── */}
+                {/* Tagline */}
+                <div className="wlc-tagline">
+                    <p className="wlc-tagline-eyebrow">Plataforma de estágios</p>
+                    <h2>Encontre sua vaga<br/><em>dos sonhos.</em></h2>
+                </div>
+
+                {/* Vagas em destaque */}
                 <div className="wlc-center-card">
                     <div className="wlc-cc-header">
                         <div className="wlc-cc-header-left">
@@ -256,137 +262,26 @@ export default function Welcome() {
                     </div>
 
                     <div className="wlc-cc-vaga">
-                        <div className="wlc-cc-vaga-icon" style={{background:'rgba(124,58,237,0.25)',color:'#c4b5fd'}}>
+                        <div className="wlc-cc-vaga-icon" style={{background:'rgba(5,150,105,0.25)',color:'#6ee7b7'}}>
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 19l7-7 3 3-7 7-3-3z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                         </div>
                         <div className="wlc-cc-vaga-info">
                             <p className="wlc-cc-vaga-title">Estágio UI/UX Design</p>
                             <p className="wlc-cc-vaga-company">Creative Minds · Campinas</p>
                         </div>
-                        <span className="wlc-cc-tag" style={{background:'rgba(124,58,237,0.2)',color:'#c4b5fd'}}>Design</span>
+                        <span className="wlc-cc-tag" style={{background:'rgba(5,150,105,0.2)',color:'#6ee7b7'}}>Design</span>
                     </div>
 
                     <div className="wlc-cc-vaga">
-                        <div className="wlc-cc-vaga-icon" style={{background:'rgba(5,150,105,0.25)',color:'#6ee7b7'}}>
+                        <div className="wlc-cc-vaga-icon" style={{background:'rgba(251,146,60,0.25)',color:'#fdba74'}}>
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><line x1="18" y1="20" x2="18" y2="10" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="12" y1="20" x2="12" y2="4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="6" y1="20" x2="6" y2="14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
                         </div>
                         <div className="wlc-cc-vaga-info">
                             <p className="wlc-cc-vaga-title">Estágio em Marketing Digital</p>
                             <p className="wlc-cc-vaga-company">Growth Pro · Remoto</p>
                         </div>
-                        <span className="wlc-cc-tag" style={{background:'rgba(5,150,105,0.2)',color:'#6ee7b7'}}>Mkt</span>
+                        <span className="wlc-cc-tag" style={{background:'rgba(251,146,60,0.2)',color:'#fdba74'}}>Mkt</span>
                     </div>
-                </div>
-
-                {/* ── Cards ao redor ── */}
-
-                {/* Esquerda superior */}
-                <div className="wlc-ui-card wlc-card-chart">
-                    <div className="wlc-card-top-row">
-                        <span className="wlc-card-label">Vagas abertas</span>
-                        <span className="wlc-live-dot" />
-                    </div>
-                    <p className="wlc-card-num">90<span>+</span></p>
-                    <svg className="wlc-graph" viewBox="0 0 140 48" fill="none" preserveAspectRatio="none">
-                        <defs>
-                            <linearGradient id="gFill" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stopColor="#818cf8" stopOpacity=".45"/>
-                                <stop offset="100%" stopColor="#818cf8" stopOpacity="0"/>
-                            </linearGradient>
-                        </defs>
-                        <path d="M0 40 C20 36,30 32,45 26 S70 18,90 14 S115 8,140 4"
-                            stroke="#818cf8" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
-                        <path d="M0 48 L0 40 C20 36,30 32,45 26 S70 18,90 14 S115 8,140 4 L140 48 Z"
-                            fill="url(#gFill)"/>
-                    </svg>
-                    <div className="wlc-month-row">
-                        {['Jan','Fev','Mar','Abr','Mai'].map(m => <span key={m}>{m}</span>)}
-                    </div>
-                </div>
-
-                {/* Direita superior */}
-                <div className="wlc-ui-card wlc-card-hired">
-                    <div className="wlc-card-top-row">
-                        <span className="wlc-card-label">Contratados</span>
-                    </div>
-                    <div className="wlc-avatar-stack">
-                        {['#a5b4fc','#93c5fd','#86efac'].map((c, i) => (
-                            <div key={i} className="wlc-avatar" style={{ background: c }}>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                                    <circle cx="12" cy="8" r="4" fill="rgba(255,255,255,.85)"/>
-                                    <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="rgba(255,255,255,.85)"/>
-                                </svg>
-                            </div>
-                        ))}
-                        <span className="wlc-avatar-more">+200</span>
-                    </div>
-                    <p className="wlc-card-sub">este semestre</p>
-                    <div className="wlc-tag-row">
-                        <span className="wlc-tag">Estudante</span>
-                        <span className="wlc-tag">Empresa</span>
-                    </div>
-                </div>
-
-                {/* Esquerda baixo — notificação */}
-                <div className="wlc-ui-card wlc-card-notif">
-                    <div className="wlc-notif-icon">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
-                            <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"
-                                stroke="#4f46e5" strokeWidth="2" strokeLinecap="round"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <p className="wlc-notif-title">Nova vaga!</p>
-                        <p className="wlc-notif-sub">Front-end · Tech Solutions</p>
-                    </div>
-                    <span className="wlc-notif-badge">Agora</span>
-                </div>
-
-                {/* Direita baixo — taxa */}
-                <div className="wlc-ui-card wlc-card-rate">
-                    <p className="wlc-card-label">Taxa de sucesso</p>
-                    <div className="wlc-rate-row">
-                        <span className="wlc-rate-num">95<small>%</small></span>
-                        <svg width="46" height="46" viewBox="0 0 36 36" fill="none">
-                            <circle cx="18" cy="18" r="15" stroke="#f1f5f9" strokeWidth="4"/>
-                            <circle cx="18" cy="18" r="15" stroke="#4f46e5" strokeWidth="4"
-                                strokeDasharray="89 6" strokeDashoffset="23" strokeLinecap="round"/>
-                        </svg>
-                    </div>
-                    <p className="wlc-card-sub">dos alunos empregados</p>
-                </div>
-
-                {/* Topo centro — tagline */}
-                <div className="wlc-tagline">
-                    <p className="wlc-tagline-eyebrow">Plataforma de estágios</p>
-                    <h2>Encontre sua vaga<br/><em>dos sonhos.</em></h2>
-                    <div className="wlc-dots-nav">
-                        <span className="wlc-dot active" />
-                        <span className="wlc-dot" />
-                        <span className="wlc-dot" />
-                    </div>
-                </div>
-
-                {/* Orbs nos cantos livres */}
-                <div className="wlc-orb wlc-orb-a">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 3L1 9l11 6 9-4.91V17M5 13.18v4L12 21l7-3.82v-4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                </div>
-                <div className="wlc-orb wlc-orb-b">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                        <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" stroke="#fff" strokeWidth="2"/>
-                    </svg>
-                </div>
-                <div className="wlc-orb wlc-orb-c">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                        <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" stroke="#fff" strokeWidth="2" strokeLinecap="round"/>
-                    </svg>
-                </div>
-                <div className="wlc-orb wlc-orb-d">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="#fff" strokeWidth="2" strokeLinejoin="round"/>
-                    </svg>
                 </div>
 
             </section>

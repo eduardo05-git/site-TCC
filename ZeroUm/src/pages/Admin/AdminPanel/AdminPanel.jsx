@@ -237,8 +237,19 @@ export default function AdminPanel() {
                             <>
                               <td><input className="adm-input" name="nome"          value={formData.nome          || ''} onChange={handleChange} /></td>
                               <td><input className="adm-input" name="email"         value={formData.email         || ''} onChange={handleChange} /></td>
-                              <td><input className="adm-input" name="nivelAcesso"   value={formData.nivelAcesso   || ''} onChange={handleChange} /></td>
-                              <td><input className="adm-input" name="statusUsuario" value={formData.statusUsuario || ''} onChange={handleChange} /></td>
+                              <td>
+                                <select className="adm-input" name="nivelAcesso" value={formData.nivelAcesso || ''} onChange={handleChange}>
+                                  <option value="ESTUDANTE">Estudante</option>
+                                  <option value="EMPRESA">Empresa</option>
+                                  <option value="ADMIN">Administrador</option>
+                                </select>
+                              </td>
+                              <td>
+                                <select className="adm-input" name="statusUsuario" value={formData.statusUsuario || ''} onChange={handleChange}>
+                                  <option value="ATIVO">Ativo</option>
+                                  <option value="INATIVO">Inativo</option>
+                                </select>
+                              </td>
                               <td className="adm-td-actions">
                                 <button className="adm-btn-save"   onClick={() => handleUpdate(user.id)}>Salvar</button>
                                 <button className="adm-btn-cancel" onClick={() => setEditing(null)}>Cancelar</button>
@@ -248,7 +259,7 @@ export default function AdminPanel() {
                             <>
                               <td>{user.nome}</td>
                               <td className="adm-td-email">{user.email}</td>
-                              <td><span className="adm-nivel-badge">{user.nivelAcesso}</span></td>
+                              <td><span className={`adm-nivel-badge ${user.nivelAcesso?.toLowerCase()}`}>{user.nivelAcesso}</span></td>
                               <td><span className={`adm-status-badge ${user.statusUsuario === 'ATIVO' ? 'ativo' : 'inativo'}`}>{user.statusUsuario}</span></td>
                               <td className="adm-td-actions">
                                 <button className="adm-btn-edit"   onClick={() => startEdit(user)}>Editar</button>

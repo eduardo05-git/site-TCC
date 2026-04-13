@@ -444,11 +444,15 @@
 .adm-nivel-badge {
   font-size: 0.72rem;
   font-weight: 700;
-  background: #eff6ff;
-  color: #2563eb;
   padding: 4px 12px;
   border-radius: 999px;
+  background: #eff6ff;
+  color: #2563eb;
 }
+
+.adm-nivel-badge.estudante    { background: #eff6ff; color: #2563eb; }
+.adm-nivel-badge.empresa      { background: #f0fdf4; color: #16a34a; }
+.adm-nivel-badge.admin { background: #fef3c7; color: #b45309; }
 
 .adm-status-badge {
   font-size: 0.72rem;

@@ -482,21 +482,27 @@
     height: 100%;
     position: relative;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    padding: 48px 32px;
     animation: panelRight 0.55s ease both;
 }
 
 .wlc-right-bg {
     position: absolute;
     inset: 0;
-    background: linear-gradient(155deg, #1e1b4b 0%, #312e81 25%, #4338ca 60%, #4f46e5 100%);
+    background: linear-gradient(155deg, #0b2a52 0%, #0b3a73 30%, #0d4f86 65%, #1565c0 100%);
 }
 
 .wlc-right-glow {
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(ellipse 80% 55% at 50% 105%, rgba(99,102,241,.5) 0%, transparent 60%),
-        radial-gradient(ellipse 45% 30% at 18% 10%, rgba(196,181,253,.13) 0%, transparent 60%);
+        radial-gradient(ellipse 80% 55% at 50% 105%, rgba(21,101,192,.5) 0%, transparent 60%),
+        radial-gradient(ellipse 45% 30% at 18% 10%, rgba(100,181,246,.1) 0%, transparent 60%);
     pointer-events: none;
 }
 
@@ -777,10 +783,7 @@
 
 /* ── Tagline — topo do painel ── */
 .wlc-tagline {
-    position: absolute;
-    top: 36px;
-    left: 50%;
-    transform: translateX(-50%);
+    position: relative;
     z-index: 5;
     text-align: center;
     color: #fff;
@@ -828,24 +831,21 @@
 
 /* ── Card central — vagas em destaque ── */
 .wlc-center-card {
-    position: absolute;
-    inset: 0;
-    margin: auto;
-    height: fit-content;
+    position: relative;
     z-index: 3;
-    width: min(680px, 72%);
-    background: rgba(15, 12, 48, 0.7);
+    width: min(620px, 88%);
+    background: rgba(8, 24, 50, 0.65);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    border-radius: 32px;
-    border: 1px solid rgba(255,255,255,0.14);
-    padding: 44px;
+    border-radius: 28px;
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 40px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 18px;
     box-shadow:
-        0 40px 80px rgba(0,0,0,0.5),
-        0 0 0 1px rgba(255,255,255,0.05) inset;
+        0 32px 64px rgba(0,0,0,0.4),
+        0 0 0 1px rgba(255,255,255,0.04) inset;
     animation: fadeUp .65s cubic-bezier(.22,.68,0,1.05) .1s both;
 }
 
