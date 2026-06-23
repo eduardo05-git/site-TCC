@@ -26,6 +26,8 @@ function Login() {
 
         if (userData.nivelAcesso === 'ADMIN') {
           navigate('/admin-panel');
+        } else if (userData.nivelAcesso === 'EMPRESA') {
+          navigate('/empresa');
         } else {
           navigate('/');
         }

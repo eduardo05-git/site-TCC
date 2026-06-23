@@ -15,8 +15,11 @@ const vagasMock = [
 ];
 
 export default function Empresa() {
-  const [step, setStep]           = useState('gate');
-  const [nomeEmpresa, setNome]    = useState('');
+  const usuarioLogado = JSON.parse(localStorage.getItem('user') || '{}');
+  const jaLogado = usuarioLogado.nivelAcesso === 'EMPRESA';
+
+  const [step, setStep]           = useState(jaLogado ? 'dashboard' : 'gate');
+  const [nomeEmpresa, setNome]    = useState(usuarioLogado.nome || '');
   const [senha, setSenha]         = useState('');
   const [aba, setAba]             = useState('vagas');
   const [vagas, setVagas]         = useState(vagasMock);

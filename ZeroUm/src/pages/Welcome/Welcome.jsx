@@ -66,10 +66,6 @@ export default function Welcome() {
     async function handleLogin(e) {
         e.preventDefault(); setLoading(true); setError('');
 
-        if (perfil.tipo === 'EMPRESA') {
-            navigate('/empresa');
-            return;
-        }
         if (perfil.tipo === 'ADMIN') {
             navigate('/admin-panel');
             return;
@@ -79,7 +75,7 @@ export default function Welcome() {
             const res = await axios.post(API_LOGIN_URL, { email, senha, nivelAcesso: perfil.tipo });
             if (res.status === 200 && res.data) {
                 localStorage.setItem('user', JSON.stringify(res.data));
-                if (perfil.tipo === 'ADMIN') { localStorage.setItem('isAdmin', 'true'); navigate('/admin-panel'); }
+                if (res.data.nivelAcesso === 'EMPRESA') navigate('/empresa');
                 else navigate('/');
             }
         } catch (err) {
