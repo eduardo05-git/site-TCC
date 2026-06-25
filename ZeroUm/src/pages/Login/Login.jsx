@@ -48,6 +48,13 @@ function Login() {
   return (
     <div className="login-bg">
       <div className="login-card">
+        <button type="button" className="login-back" onClick={() => navigate('/welcome')}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+            <path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          Voltar
+        </button>
+
         <div className="login-brand">
           <span className="login-brand-name">Neway</span>
         </div>

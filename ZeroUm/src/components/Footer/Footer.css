@@ -114,6 +114,7 @@
 
 /* O Nome Gigante do Fundo */
 .footer-giant-text {
+  font-family: 'Azeret Mono', 'Inter', sans-serif;
   font-size: 28vw; /* Escala baseada na largura da tela */
   font-weight: 900;
   color: #11233f; /* Azul sutil que atua como marca d'água */

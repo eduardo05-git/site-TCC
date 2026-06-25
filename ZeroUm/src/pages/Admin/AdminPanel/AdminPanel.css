@@ -24,6 +24,8 @@
 }
 
 .adm-logo {
+  font-family: 'Azeret Mono', 'Inter', sans-serif;
+  text-transform: lowercase;
   font-size: 1.4rem;
   font-weight: 900;
   color: white;

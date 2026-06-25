@@ -326,7 +326,7 @@ function Home() {
         <div className="cta-glass-box">
           <h2>Seu próximo Prodígio está Aqui.</h2>
           <p>Conecte-se diretamente com os talentos promissores e cheios de vontade de aprender da Escola Brasilio Flores de Azevedo.</p>
-          <Link to="/PubliqueSuaVaga" className="btn-glow white-glow">Publicar Vaga Grátis</Link>
+          <Link to="/cadastro" state={{ tipo: 'EMPRESA' }} className="btn-glow white-glow">Cadastrar minha empresa</Link>
         </div>
       </section>
 

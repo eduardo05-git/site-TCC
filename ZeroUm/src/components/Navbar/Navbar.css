@@ -25,6 +25,8 @@
 }
 
 .navbar-logo {
+    font-family: 'Azeret Mono', 'Segoe UI', sans-serif;
+    text-transform: lowercase;
     font-size: 1.35rem;     /* Tamanho original */
     font-weight: 900;       /* Mais grossa possível via font */
     -webkit-text-stroke: 1px #0b3a73; /* Método "bruto" para engrossar ainda mais a letra */
@@ -79,20 +81,6 @@
 
 .nav-item.active-link a {
     color: #0d4f86; /* Texto azul escuro */
-}
-
-.nav-badge {
-    background-color: #0d4f86; /* Azul escuro no badge */
-    color: #ffffff;
-    font-size: 0.75rem;
-    font-weight: bold;
-    height: 20px;
-    width: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    margin-left: 4px;
 }
 
 .login-entre {
@@ -160,78 +148,6 @@
     gap: 20px;
     position: relative;
     padding-right: 14px;
-}
-
-.notification-bell {
-    font-size: 1.3rem;
-    cursor: pointer;
-    user-select: none;
-    color: #0b3a73;
-    padding: 10px;
-    border-radius: 50%;
-    background-color: #f3f8ff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    transition: background 0.3s ease;
-}
-
-.notification-bell:hover, .notification-bell.active {
-    background-color: #dff0ff;
-}
-
-.badge {
-    position: absolute;
-    top: -2px;
-    right: -2px;
-    background-color: #ef4444; /* Vermelho para atenção/notificações */
-    color: #ffffff;
-    font-size: 0.65rem;
-    font-weight: bold;
-    height: 18px;
-    width: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    border: 2px solid #ffffff;
-}
-
-.notifications-popup {
-    position: absolute;
-    top: 55px;
-    right: 0;
-    background: #ffffff;
-    color: #333;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-    width: 320px;
-    padding: 10px 0;
-    z-index: 200;
-    border: 1px solid #e8f2ff;
-}
-
-.notifications-popup ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-.notifications-popup ul li {
-    padding: 14px 20px;
-    border-bottom: 1px solid #f3f8ff;
-    font-size: 0.9rem;
-    color: #425a75;
-    transition: background 0.2s;
-}
-
-.notifications-popup ul li:hover {
-    background: #fdfefe;
-}
-
-.notifications-popup ul li:last-child {
-    border-bottom: none;
 }
 
 @media (max-width: 860px) {

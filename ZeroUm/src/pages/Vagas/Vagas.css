@@ -41,11 +41,34 @@
 
 /* ========== HERO ========== */
 .vagas-hero-novo {
+    position: relative;
+    overflow: hidden;
     text-align: center;
-    padding: 80px 24px 56px;
+    padding: 72px 24px 48px;
     background: #ffffff;
     border-bottom: 1px solid #e2e8f0;
     animation: fadeSlideUp 0.6s ease both;
+}
+
+.vagas-hero-glow {
+    position: absolute;
+    top: -25%;
+    left: 50%;
+    width: 720px;
+    height: 480px;
+    transform: translateX(-50%);
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.14) 0%, transparent 65%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.vagas-hero-label,
+.vagas-hero-titulo,
+.vagas-hero-sub,
+.vagas-busca-wrapper,
+.vagas-hero-stats {
+    position: relative;
+    z-index: 1;
 }
 
 .vagas-hero-label {
@@ -58,6 +81,7 @@
 }
 
 .vagas-hero-titulo {
+    font-family: 'Chillax', 'Segoe UI', Tahoma, sans-serif;
     font-size: 2.8rem;
     font-weight: 800;
     color: #0f172a;
@@ -66,7 +90,7 @@
 }
 
 .vagas-hero-destaque {
-    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 40%, #a78bfa 60%, #6366f1 100%);
+    background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 40%, #60a5fa 60%, #1d4ed8 100%);
     background-size: 200% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -98,19 +122,44 @@
 
 .vagas-busca {
     width: 100%;
-    padding: 14px 20px 14px 44px;
+    padding: 15px 20px 15px 44px;
     border: 1.5px solid #e2e8f0;
-    border-radius: 12px;
+    border-radius: 14px;
     font-size: 0.95rem;
     color: #1e293b;
     background: #f8fafc;
     outline: none;
-    transition: border-color 0.2s;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
 }
 
 .vagas-busca:focus {
     border-color: #6366f1;
     background: #fff;
+    box-shadow: 0 4px 18px rgba(99, 102, 241, 0.15);
+}
+
+.vagas-hero-stats {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    margin-top: 28px;
+    font-size: 0.88rem;
+    color: #64748b;
+}
+
+.vagas-hero-stats strong {
+    color: #0f172a;
+    font-weight: 800;
+    font-size: 1rem;
+}
+
+.vagas-hero-stats-divider {
+    width: 1px;
+    height: 16px;
+    background: #e2e8f0;
 }
 
 /* ========== FILTROS ========== */

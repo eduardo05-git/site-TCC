@@ -226,6 +226,8 @@ function Vagas() {
         <div className="vagas-page">
             {/* Hero */}
             <section className="vagas-hero-novo">
+                <div className="vagas-hero-glow" aria-hidden="true"></div>
+
                 <p className="vagas-hero-label">Oportunidades</p>
                 <h1 className="vagas-hero-titulo">
                     Encontre sua <span className="vagas-hero-destaque">vaga ideal</span>
@@ -245,6 +247,14 @@ function Vagas() {
                         value={busca}
                         onChange={e => setBusca(e.target.value)}
                     />
+                </div>
+
+                <div className="vagas-hero-stats">
+                    <span><strong>+90</strong> vagas abertas</span>
+                    <span className="vagas-hero-stats-divider" />
+                    <span><strong>40+</strong> empresas parceiras</span>
+                    <span className="vagas-hero-stats-divider" />
+                    <span><strong>200+</strong> alunos contratados</span>
                 </div>
             </section>
 

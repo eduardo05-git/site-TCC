@@ -126,6 +126,8 @@
 }
 
 .admin-logo {
+  font-family: 'Azeret Mono', 'Segoe UI', sans-serif;
+  text-transform: lowercase;
   font-size: 1.8rem;
   font-weight: 800;
   color: #1a1a1a;
@@ -136,6 +138,7 @@
 }
 
 .admin-badge {
+  text-transform: none;
   background: #ebf5ff;
   color: #007bff;
   font-size: 0.8rem;

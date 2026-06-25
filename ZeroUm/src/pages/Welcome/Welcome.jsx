@@ -132,7 +132,7 @@ export default function Welcome() {
                             </div>
 
                             <div className="wlc-divider"><span>Primeira vez aqui?</span></div>
-                            <Link to="/cadastro" className="wlc-register-btn">Criar conta grátis</Link>
+                            <Link to="/cadastro" className="wlc-register-btn">Criar conta</Link>
 
                             {/* Temporário */}
                             <button className="wlc-skip-btn" onClick={() => {
@@ -208,7 +208,7 @@ export default function Welcome() {
                             </form>
 
                             <p className="wlc-foot-link">
-                                Sem conta? <Link to="/cadastro">Cadastre-se grátis</Link>
+                                Sem conta? <Link to="/cadastro">Cadastre-se</Link>
                             </p>
                         </div>
                     )}

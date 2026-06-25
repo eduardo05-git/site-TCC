@@ -23,6 +23,8 @@
 }
 
 .emp-gate-logo {
+  font-family: 'Azeret Mono', 'Inter', sans-serif;
+  text-transform: lowercase;
   font-size: 1.4rem;
   font-weight: 900;
   color: #2563eb;
@@ -157,6 +159,8 @@
 }
 
 .emp-sidebar-logo {
+  font-family: 'Azeret Mono', 'Inter', sans-serif;
+  text-transform: lowercase;
   font-size: 1.4rem;
   font-weight: 900;
   color: white;
@@ -291,6 +295,8 @@
 }
 
 .emp-footer-brand {
+  font-family: 'Azeret Mono', 'Inter', sans-serif;
+  text-transform: lowercase;
   font-size: 1.4rem;
   font-weight: 900;
   letter-spacing: -0.04em;
@@ -327,6 +333,7 @@
 }
 
 .emp-footer-giant {
+  font-family: 'Azeret Mono', 'Inter', sans-serif;
   font-size: clamp(80px, 14vw, 180px);
   font-weight: 900;
   color: rgba(255,255,255,0.04);

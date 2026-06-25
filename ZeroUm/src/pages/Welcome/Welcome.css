@@ -100,6 +100,8 @@
 }
 
 .wlc-logo-nome {
+    font-family: 'Azeret Mono', 'Segoe UI', sans-serif;
+    text-transform: lowercase;
     font-size: 1.2rem;
     font-weight: 800;
     color: #0f172a;
@@ -467,7 +469,7 @@
 /* Legal */
 .wlc-legal {
     font-size: 0.7rem;
-    color: #dde4ef;
+    color: #94a3b8;
     text-align: center;
     position: relative;
     z-index: 1;
