@@ -1,70 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./Vagas.css";
+import { AREAS } from "../../constants/vaga";
 
-const vagas = [
-    {
-        titulo: "Estágio Front-end React",
-        empresa: "Tech Solutions",
-        categoria: "Desenvolvimento",
-        descricao: "Junte-se ao nosso time ágil desenvolvendo interfaces incríveis de alta performance.",
-        requisitos: "JavaScript ES6, HTML5, CSS3. Mente criativa e facilidade com React.",
-        iconeBg: "#e8f5e9",
-        iconeColor: "#43a047",
-        icone: "dev",
-    },
-    {
-        titulo: "Estágio em Marketing Digital",
-        empresa: "Growth Pro",
-        categoria: "Comunicação",
-        descricao: "Ajude marcas a quebrarem recordes com estratégias de tráfego pago e social media.",
-        requisitos: "Noções de SEO, Google Ads e ferramentas de análise. Muita criatividade.",
-        iconeBg: "#e3f2fd",
-        iconeColor: "#1976d2",
-        icone: "chart",
-    },
-    {
-        titulo: "Estágio em UI/UX Design",
-        empresa: "Creative Minds Studio",
-        categoria: "Design",
-        descricao: "Desenho de protótipos encantadores com foco na jornada do usuário.",
-        requisitos: "Domínio de Figma. Noções básicas de usabilidade. Paixão por cores.",
-        iconeBg: "#f3e5f5",
-        iconeColor: "#9c27b0",
-        icone: "pen",
-    },
-    {
-        titulo: "Estágio em Suporte Técnico",
-        empresa: "InfoHelp",
-        categoria: "TI",
-        descricao: "Atendimento ao cliente e resolução de problemas técnicos de forma ágil.",
-        requisitos: "Boa comunicação, conhecimento básico em informática e redes.",
-        iconeBg: "#fff3e0",
-        iconeColor: "#f57c00",
-        icone: "support",
-    },
-    {
-        titulo: "Estágio em Recursos Humanos",
-        empresa: "RH Mais",
-        categoria: "RH",
-        descricao: "Auxiliar nos processos de recrutamento, seleção e cultura organizacional.",
-        requisitos: "Cursando Administração, Psicologia ou áreas afins.",
-        iconeBg: "#fce4ec",
-        iconeColor: "#e91e63",
-        icone: "people",
-    },
-    {
-        titulo: "Estágio em Finanças",
-        empresa: "Finance Group",
-        categoria: "Finanças",
-        descricao: "Apoio em análises financeiras e elaboração de relatórios estratégicos.",
-        requisitos: "Excel intermediário, cursando Administração ou Economia.",
-        iconeBg: "#e8eaf6",
-        iconeColor: "#3f51b5",
-        icone: "finance",
-    },
-];
+const API_BASE = "http://localhost:8080/api/v1";
 
-const categorias = ["Todas", "Desenvolvimento", "Comunicação", "Design", "TI", "RH", "Finanças"];
+const ICONE_POR_AREA = {
+    "TI / Desenvolvimento": { icone: "dev", iconeBg: "#e8f5e9", iconeColor: "#43a047" },
+    "Marketing":            { icone: "chart", iconeBg: "#e3f2fd", iconeColor: "#1976d2" },
+    "Design":               { icone: "pen", iconeBg: "#f3e5f5", iconeColor: "#9c27b0" },
+    "Administração":        { icone: "people", iconeBg: "#fce4ec", iconeColor: "#e91e63" },
+    "Engenharia":           { icone: "support", iconeBg: "#fff3e0", iconeColor: "#f57c00" },
+    "Outro":                { icone: "finance", iconeBg: "#e8eaf6", iconeColor: "#3f51b5" },
+};
+const ICONE_PADRAO = { icone: "finance", iconeBg: "#e8eaf6", iconeColor: "#3f51b5" };
+
+const categorias = ["Todas", ...AREAS];
 
 const IconeVaga = ({ tipo, color }) => {
     switch (tipo) {
@@ -144,14 +95,31 @@ function VagaCard({ vaga, onVerDetalhes }) {
     );
 }
 
-function ModalDetalhes({ vaga, onFechar }) {
-    const [candidatado, setCandidatado] = React.useState(false);
+function ModalDetalhes({ vaga, onFechar, alunoId, jaCandidatado, onCandidatar }) {
+    const [enviando, setEnviando] = React.useState(false);
+    const [erroCandidatura, setErroCandidatura] = React.useState("");
 
     React.useEffect(() => {
-        if (vaga) setCandidatado(false);
+        setErroCandidatura("");
     }, [vaga]);
 
     if (!vaga) return null;
+
+    async function handleCandidatar() {
+        if (!alunoId) {
+            setErroCandidatura("Não encontramos seu cadastro de aluno. Fale com o suporte.");
+            return;
+        }
+        setEnviando(true);
+        setErroCandidatura("");
+        try {
+            await onCandidatar(vaga.id);
+        } catch (err) {
+            setErroCandidatura("Não foi possível enviar sua candidatura. Tente novamente.");
+        } finally {
+            setEnviando(false);
+        }
+    }
     return (
         <div className="modal-overlay" onClick={onFechar}>
             <div className="modal-box" onClick={e => e.stopPropagation()}>
@@ -165,6 +133,35 @@ function ModalDetalhes({ vaga, onFechar }) {
                 <h2 className="modal-titulo">{vaga.titulo}</h2>
                 <p className="modal-empresa">{vaga.empresa}</p>
 
+                {(vaga.modalidade || vaga.cidade || vaga.bairro || vaga.cargaHoraria || vaga.salario) && (
+                    <div className="modal-detalhes-grid">
+                        {vaga.modalidade && (
+                            <div className="modal-detalhe-item">
+                                <span className="modal-detalhe-label">Modalidade</span>
+                                <span className="modal-detalhe-valor">{vaga.modalidade}</span>
+                            </div>
+                        )}
+                        {(vaga.cidade || vaga.bairro) && (
+                            <div className="modal-detalhe-item">
+                                <span className="modal-detalhe-label">Local</span>
+                                <span className="modal-detalhe-valor">{[vaga.bairro, vaga.cidade].filter(Boolean).join(" - ")}</span>
+                            </div>
+                        )}
+                        {vaga.cargaHoraria && (
+                            <div className="modal-detalhe-item">
+                                <span className="modal-detalhe-label">Carga horária</span>
+                                <span className="modal-detalhe-valor">{vaga.cargaHoraria}</span>
+                            </div>
+                        )}
+                        {vaga.salario && (
+                            <div className="modal-detalhe-item">
+                                <span className="modal-detalhe-label">Bolsa-auxílio</span>
+                                <span className="modal-detalhe-valor">{vaga.salario}</span>
+                            </div>
+                        )}
+                    </div>
+                )}
+
                 <div className="modal-secao">
                     <h4>Sobre a vaga</h4>
                     <p>{vaga.descricao}</p>
@@ -173,8 +170,8 @@ function ModalDetalhes({ vaga, onFechar }) {
                 <div className="modal-secao">
                     <h4>Requisitos</h4>
                     <ul>
-                        {vaga.requisitos.split(',').map((req, i) => (
-                            <li key={i}>{req.trim()}</li>
+                        {(vaga.requisitos || "").split(/\n|,/).map(r => r.trim()).filter(Boolean).map((req, i) => (
+                            <li key={i}>{req}</li>
                         ))}
                     </ul>
                 </div>
@@ -189,18 +186,26 @@ function ModalDetalhes({ vaga, onFechar }) {
                     </ul>
                 </div>
 
-                <button 
-                    className={`modal-btn-inscrever ${candidatado ? "sucesso" : ""}`}
-                    onClick={() => setCandidatado(true)}
-                    disabled={candidatado}
+                {erroCandidatura && (
+                    <p style={{ color: '#ef4444', fontSize: '0.85rem', textAlign: 'center', marginBottom: '10px' }}>
+                        {erroCandidatura}
+                    </p>
+                )}
+
+                <button
+                    className={`modal-btn-inscrever ${jaCandidatado ? "sucesso" : ""}`}
+                    onClick={handleCandidatar}
+                    disabled={jaCandidatado || enviando}
                 >
-                    {candidatado ? (
+                    {jaCandidatado ? (
                         <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                                 <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                             </svg>
                             Candidatura Enviada
                         </span>
+                    ) : enviando ? (
+                        "Enviando..."
                     ) : (
                         "Se Candidatar"
                     )}
@@ -211,9 +216,65 @@ function ModalDetalhes({ vaga, onFechar }) {
 }
 
 function Vagas() {
+    const usuarioLogado = JSON.parse(localStorage.getItem("user") || "{}");
+
+    const [vagas, setVagas] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [erro, setErro] = useState("");
     const [filtro, setFiltro] = useState("Todas");
     const [busca, setBusca] = useState("");
     const [vagaSelecionada, setVagaSelecionada] = useState(null);
+
+    const [alunoId, setAlunoId] = useState(null);
+    const [vagasCandidatadas, setVagasCandidatadas] = useState([]);
+
+    useEffect(() => {
+        if (usuarioLogado.nivelAcesso !== "ESTUDANTE") return;
+        axios.get(`${API_BASE}/aluno`)
+            .then(res => {
+                const meuAluno = res.data.find(a => a.usuarioId === usuarioLogado.id);
+                if (meuAluno) setAlunoId(meuAluno.id);
+            })
+            .catch(() => {});
+    }, []);
+
+    useEffect(() => {
+        if (!alunoId) return;
+        axios.get(`${API_BASE}/candidatura/aluno/${alunoId}`)
+            .then(res => setVagasCandidatadas(res.data.map(c => c.vagaId)))
+            .catch(() => {});
+    }, [alunoId]);
+
+    async function handleCandidatar(vagaId) {
+        await axios.post(`${API_BASE}/candidatura`, { alunoId, vagaId });
+        setVagasCandidatadas(prev => [...prev, vagaId]);
+    }
+
+    useEffect(() => {
+        setLoading(true);
+        setErro("");
+        Promise.all([
+            axios.get(`${API_BASE}/vaga`, { params: { status: "APROVADA" } }),
+            axios.get(`${API_BASE}/empresa`),
+        ])
+            .then(([resVagas, resEmpresas]) => {
+                const empresas = resEmpresas.data;
+                const nomeEmpresa = (empresaId) => {
+                    const e = empresas.find(emp => emp.id === empresaId);
+                    return e ? e.nome : "Empresa parceira";
+                };
+                const vagasEnriquecidas = resVagas.data.map(v => ({
+                    ...v,
+                    titulo: v.nome,
+                    empresa: nomeEmpresa(v.empresaId),
+                    categoria: v.area,
+                    ...(ICONE_POR_AREA[v.area] || ICONE_PADRAO),
+                }));
+                setVagas(vagasEnriquecidas);
+            })
+            .catch(() => setErro("Não foi possível carregar as vagas. Verifique se o servidor está rodando."))
+            .finally(() => setLoading(false));
+    }, []);
 
     const vagasFiltradas = vagas.filter(v => {
         const matchCategoria = filtro === "Todas" || v.categoria === filtro;
@@ -275,14 +336,22 @@ function Vagas() {
 
             {/* Grid de vagas */}
             <div className="vagas-grid-wrapper">
-                {vagasFiltradas.length === 0 ? (
+                {loading ? (
+                    <div className="vagas-empty">
+                        <p>Carregando vagas...</p>
+                    </div>
+                ) : erro ? (
+                    <div className="vagas-empty">
+                        <p>{erro}</p>
+                    </div>
+                ) : vagasFiltradas.length === 0 ? (
                     <div className="vagas-empty">
                         <p>Nenhuma vaga encontrada para este filtro.</p>
                     </div>
                 ) : (
                     <div className="vagas-grid">
-                        {vagasFiltradas.map((vaga, i) => (
-                            <VagaCard key={i} vaga={vaga} onVerDetalhes={setVagaSelecionada} />
+                        {vagasFiltradas.map((vaga) => (
+                            <VagaCard key={vaga.id} vaga={vaga} onVerDetalhes={setVagaSelecionada} />
                         ))}
                     </div>
                 )}
@@ -293,7 +362,13 @@ function Vagas() {
             </div>
 
             {/* Modal */}
-            <ModalDetalhes vaga={vagaSelecionada} onFechar={() => setVagaSelecionada(null)} />
+            <ModalDetalhes
+                vaga={vagaSelecionada}
+                onFechar={() => setVagaSelecionada(null)}
+                alunoId={alunoId}
+                jaCandidatado={vagaSelecionada ? vagasCandidatadas.includes(vagaSelecionada.id) : false}
+                onCandidatar={handleCandidatar}
+            />
         </div>
     );
 }

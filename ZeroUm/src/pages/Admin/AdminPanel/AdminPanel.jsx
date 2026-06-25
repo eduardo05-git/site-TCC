@@ -3,21 +3,37 @@ import axios from 'axios';
 import './AdminPanel.css';
 
 const API_BASE_URL = 'http://localhost:8080/api/v1/usuario';
-
-const mockVagas = [
-  { id: 1, titulo: 'Desenvolvedor Backend Junior', empresa: 'TechFlow',        area: 'TI',        dataEnvio: '15/03/2024', requisitos: 'Node.js, SQL, Git' },
-  { id: 2, titulo: 'Designer UX/UI',               empresa: 'Creative Digital', area: 'Design',    dataEnvio: '16/03/2024', requisitos: 'Figma, Portfólio, Usabilidade' },
-  { id: 3, titulo: 'Analista de Dados Pleno',      empresa: 'DataCorp',         area: 'Dados',     dataEnvio: '17/03/2024', requisitos: 'Python, SQL, Power BI' },
-  { id: 4, titulo: 'Estágio em Marketing Digital', empresa: 'Growth Pro',       area: 'Marketing', dataEnvio: '18/03/2024', requisitos: 'Google Ads, SEO, Redes Sociais' },
-];
+const API_VAGA_URL = 'http://localhost:8080/api/v1/vaga';
+const API_EMPRESA_URL = 'http://localhost:8080/api/v1/empresa';
 
 export default function AdminPanel() {
   const [aba, setAba]             = useState('overview');
-  const [vagas, setVagas]         = useState(mockVagas);
-  const [vagasAprov, setVagasAprov] = useState([]);
+  const [vagas, setVagas]         = useState([]);
+  const [empresas, setEmpresas]   = useState([]);
+  const [totalAprovadas, setTotalAprovadas] = useState(0);
+  const [loadingVagas, setLoadingVagas] = useState(false);
+  const [erroVagas, setErroVagas] = useState('');
+  const [vagaRecusando, setVagaRecusando] = useState(null);
+  const [motivo, setMotivo]       = useState('');
+  const [processando, setProcessando] = useState(null);
   const [users, setUsers]         = useState([]);
   const [editingUser, setEditing] = useState(null);
   const [formData, setFormData]   = useState({});
+
+  function carregarVagasPendentes() {
+    setLoadingVagas(true);
+    setErroVagas('');
+    Promise.all([
+      axios.get(API_VAGA_URL, { params: { status: 'PENDENTE' } }),
+      axios.get(API_EMPRESA_URL),
+    ])
+      .then(([resVagas, resEmpresas]) => {
+        setVagas(resVagas.data);
+        setEmpresas(resEmpresas.data);
+      })
+      .catch(() => setErroVagas('Não foi possível carregar as vagas pendentes.'))
+      .finally(() => setLoadingVagas(false));
+  }
 
   useEffect(() => {
     if (aba === 'usuarios') {
@@ -25,15 +41,54 @@ export default function AdminPanel() {
         .then(r => setUsers(r.data))
         .catch(() => setUsers([]));
     }
+    if (aba === 'vagas' || aba === 'overview') {
+      carregarVagasPendentes();
+      axios.get(API_VAGA_URL, { params: { status: 'APROVADA' } })
+        .then(r => setTotalAprovadas(r.data.length))
+        .catch(() => {});
+    }
   }, [aba]);
 
-  function aprovar(id) {
-    setVagasAprov(prev => [...prev, vagas.find(v => v.id === id)]);
-    setVagas(prev => prev.filter(v => v.id !== id));
+  function getEmpresa(empresaId) {
+    return empresas.find(e => e.id === empresaId);
   }
 
-  function rejeitar(id) {
-    setVagas(prev => prev.filter(v => v.id !== id));
+  async function aprovar(id) {
+    setProcessando(id);
+    try {
+      await axios.put(`${API_VAGA_URL}/${id}/aprovar`);
+      setVagas(prev => prev.filter(v => v.id !== id));
+      setTotalAprovadas(prev => prev + 1);
+    } catch {
+      setErroVagas('Não foi possível aprovar a vaga. Tente novamente.');
+    } finally {
+      setProcessando(null);
+    }
+  }
+
+  function abrirRecusa(id) {
+    setVagaRecusando(id);
+    setMotivo('');
+  }
+
+  function cancelarRecusa() {
+    setVagaRecusando(null);
+    setMotivo('');
+  }
+
+  async function confirmarRecusa(id) {
+    if (!motivo.trim()) return;
+    setProcessando(id);
+    try {
+      await axios.put(`${API_VAGA_URL}/${id}/recusar`, { motivoRecusa: motivo.trim() });
+      setVagas(prev => prev.filter(v => v.id !== id));
+      setVagaRecusando(null);
+      setMotivo('');
+    } catch {
+      setErroVagas('Não foi possível recusar a vaga. Tente novamente.');
+    } finally {
+      setProcessando(null);
+    }
   }
 
   function startEdit(user) {
@@ -133,7 +188,7 @@ export default function AdminPanel() {
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                   </div>
                   <div>
-                    <p className="adm-stat-num">{vagasAprov.length}</p>
+                    <p className="adm-stat-num">{totalAprovadas}</p>
                     <p className="adm-stat-label">Vagas aprovadas</p>
                   </div>
                 </div>
@@ -172,35 +227,80 @@ export default function AdminPanel() {
                 <p>{vagas.length} vaga{vagas.length !== 1 ? 's' : ''} aguardando revisão.</p>
               </div>
 
-              {vagas.length === 0 ? (
+              {erroVagas && <div className="adm-erro-box">{erroVagas}</div>}
+
+              {loadingVagas ? (
+                <div className="adm-empty"><p>Carregando vagas...</p></div>
+              ) : vagas.length === 0 ? (
                 <div className="adm-empty">
                   <svg width="48" height="48" viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12" stroke="#16a34a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                   <p>Nenhuma vaga pendente. Excelente trabalho!</p>
                 </div>
               ) : (
                 <div className="adm-vagas-list">
-                  {vagas.map(v => (
+                  {vagas.map(v => {
+                    const empresa = getEmpresa(v.empresaId);
+                    return (
                     <div className="adm-vaga-card" key={v.id}>
                       <div className="adm-vaga-top">
                         <div>
-                          <p className="adm-vaga-titulo">{v.titulo}</p>
-                          <p className="adm-vaga-empresa">{v.empresa} · Enviado em {v.dataEnvio}</p>
+                          <p className="adm-vaga-titulo">{v.nome}</p>
+                          <p className="adm-vaga-empresa">{empresa ? empresa.nome : '—'} · Enviado em {new Date(v.dataCadastro).toLocaleDateString('pt-BR')}</p>
+                          {empresa && (
+                            <p className="adm-vaga-empresa-doc">CNPJ: {empresa.cnpj || '—'} · Tel: {empresa.telefone || '—'}</p>
+                          )}
                         </div>
                         <span className="adm-vaga-area">{v.area}</span>
                       </div>
-                      <p className="adm-vaga-req"><strong>Requisitos:</strong> {v.requisitos}</p>
+
+                      <p className="adm-vaga-descricao">{v.descricao}</p>
+
+                      {(v.modalidade || v.cidade || v.bairro || v.cargaHoraria || v.salario) && (
+                        <div className="adm-vaga-detalhes">
+                          {v.modalidade && <span><strong>Modalidade:</strong> {v.modalidade}</span>}
+                          {(v.cidade || v.bairro) && <span><strong>Local:</strong> {[v.bairro, v.cidade].filter(Boolean).join(' - ')}</span>}
+                          {v.cargaHoraria && <span><strong>Carga horária:</strong> {v.cargaHoraria}</span>}
+                          {v.salario && <span><strong>Bolsa-auxílio:</strong> {v.salario}</span>}
+                        </div>
+                      )}
+
+                      {v.requisitos && <p className="adm-vaga-req"><strong>Requisitos:</strong> {v.requisitos}</p>}
                       <div className="adm-vaga-actions">
-                        <button className="adm-btn-aprovar" onClick={() => aprovar(v.id)}>
+                        <button className="adm-btn-aprovar" disabled={processando === v.id} onClick={() => aprovar(v.id)}>
                           <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                           Aprovar
                         </button>
-                        <button className="adm-btn-rejeitar" onClick={() => rejeitar(v.id)}>
+                        <button className="adm-btn-rejeitar" disabled={processando === v.id} onClick={() => abrirRecusa(v.id)}>
                           <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/></svg>
                           Rejeitar
                         </button>
                       </div>
+
+                      {vagaRecusando === v.id && (
+                        <div className="adm-recusa-painel">
+                          <label htmlFor={`adm-motivo-${v.id}`}>Motivo da recusa (obrigatório)</label>
+                          <textarea
+                            id={`adm-motivo-${v.id}`}
+                            rows={2}
+                            placeholder="Explique pra empresa o que precisa ajustar..."
+                            value={motivo}
+                            onChange={e => setMotivo(e.target.value)}
+                            autoFocus
+                          />
+                          <div className="adm-recusa-actions">
+                            <button className="adm-btn-cancelar-recusa" onClick={cancelarRecusa}>Cancelar</button>
+                            <button
+                              className="adm-btn-confirmar-recusa"
+                              disabled={!motivo.trim() || processando === v.id}
+                              onClick={() => confirmarRecusa(v.id)}
+                            >
+                              {processando === v.id ? 'Enviando...' : 'Confirmar recusa'}
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  ))}
+                  );})}
                 </div>
               )}
             </div>

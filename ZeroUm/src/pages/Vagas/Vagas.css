@@ -494,6 +494,37 @@
     margin-bottom: 20px;
 }
 
+.modal-detalhes-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin-bottom: 20px;
+}
+
+.modal-detalhe-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.modal-detalhe-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #94a3b8;
+}
+
+.modal-detalhe-valor {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #0f172a;
+}
+
 .modal-secao {
     margin-bottom: 20px;
 }

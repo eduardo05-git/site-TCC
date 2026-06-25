@@ -5,30 +5,20 @@ import './Perfil.css';
 import { DropzoneArea } from './DropzoneArea';
 
 const API_BASE_URL = 'http://localhost:8080/api/v1/usuario';
+const API_BASE = 'http://localhost:8080/api/v1';
 
-const minhasVagasMock = [
-  {
-    id: 1,
-    titulo: 'Estágio Front-end React',
-    empresa: 'Tech Solutions',
-    status: 'pendente',
-    data: '12/10/2026'
-  },
-  {
-    id: 2,
-    titulo: 'Estágio em Marketing Digital',
-    empresa: 'Growth Pro',
-    status: 'recusada',
-    data: '08/10/2026'
-  },
-  {
-    id: 3,
-    titulo: 'Estágio em UI/UX Design',
-    empresa: 'Creative Minds Studio',
-    status: 'entrou em contato',
-    data: '01/10/2026'
+function statusCandidaturaInfo(status) {
+  switch (status) {
+    case 'APROVADO':
+      return { label: 'Aprovado', classe: 'status-entrou-em-contato' };
+    case 'RECUSADO':
+      return { label: 'Recusado', classe: 'status-recusada' };
+    case 'EM_ANALISE':
+      return { label: 'Em análise', classe: 'status-pendente' };
+    default:
+      return { label: 'Enviada', classe: 'status-pendente' };
   }
-];
+}
 
 function Perfil() {
   const usuarioLogado = JSON.parse(localStorage.getItem('user') || '{}');
@@ -44,6 +34,45 @@ function Perfil() {
   const [skills, setSkills] = useState(['JavaScript', 'React', 'CSS', 'HTML']);
   const [newSkill, setNewSkill] = useState('');
   const [activeTab, setActiveTab] = useState('dados');
+
+  const [candidaturas, setCandidaturas] = useState([]);
+  const [loadingCandidaturas, setLoadingCandidaturas] = useState(true);
+  const [erroCandidaturas, setErroCandidaturas] = useState('');
+
+  useEffect(() => {
+    if (usuarioLogado.nivelAcesso !== 'ESTUDANTE') {
+      setLoadingCandidaturas(false);
+      return;
+    }
+    axios.get(`${API_BASE}/aluno`)
+      .then(resAlunos => {
+        const meuAluno = resAlunos.data.find(a => a.usuarioId === usuarioLogado.id);
+        if (!meuAluno) {
+          setLoadingCandidaturas(false);
+          return;
+        }
+        return Promise.all([
+          axios.get(`${API_BASE}/candidatura/aluno/${meuAluno.id}`),
+          axios.get(`${API_BASE}/vaga`),
+          axios.get(`${API_BASE}/empresa`),
+        ]).then(([resCandidaturas, resVagas, resEmpresas]) => {
+          const vagas = resVagas.data;
+          const empresas = resEmpresas.data;
+          const candidaturasEnriquecidas = resCandidaturas.data.map(c => {
+            const vaga = vagas.find(v => v.id === c.vagaId);
+            const empresa = vaga ? empresas.find(e => e.id === vaga.empresaId) : null;
+            return {
+              ...c,
+              titulo: vaga ? vaga.nome : 'Vaga removida',
+              empresa: empresa ? empresa.nome : '—',
+            };
+          });
+          setCandidaturas(candidaturasEnriquecidas);
+        });
+      })
+      .catch(() => setErroCandidaturas('Não foi possível carregar suas candidaturas.'))
+      .finally(() => setLoadingCandidaturas(false));
+  }, []);
 
   const handleAddSkill = (e) => {
     if (e.key === 'Enter' || e.type === 'click') {
@@ -229,20 +258,36 @@ function Perfil() {
               <div className="perfil-form">
                 <div className="perfil-section">
                   <h2>Acompanhamento de Vagas</h2>
-                  <div className="minhas-vagas-grid">
-                    {minhasVagasMock.map(vaga => (
-                      <div key={vaga.id} className="minhas-vagas-card">
-                        <div className="card-vaga-top">
-                          <h3>{vaga.titulo}</h3>
-                          <span className={`badge-status status-${vaga.status.replace(/ /g, '-')}`}>
-                            {vaga.status}
-                          </span>
-                        </div>
-                        <p className="card-vaga-empresa">{vaga.empresa}</p>
-                        <p className="card-vaga-data">Candidatura em: {vaga.data}</p>
-                      </div>
-                    ))}
-                  </div>
+
+                  {erroCandidaturas && (
+                    <p style={{ color: '#f87171', marginBottom: '12px' }}>{erroCandidaturas}</p>
+                  )}
+
+                  {loadingCandidaturas ? (
+                    <p>Carregando suas candidaturas...</p>
+                  ) : candidaturas.length === 0 ? (
+                    <p>Você ainda não se candidatou a nenhuma vaga.</p>
+                  ) : (
+                    <div className="minhas-vagas-grid">
+                      {candidaturas.map(c => {
+                        const status = statusCandidaturaInfo(c.statusCandidatura);
+                        return (
+                          <div key={c.id} className="minhas-vagas-card">
+                            <div className="card-vaga-top">
+                              <h3>{c.titulo}</h3>
+                              <span className={`badge-status ${status.classe}`}>
+                                {status.label}
+                              </span>
+                            </div>
+                            <p className="card-vaga-empresa">{c.empresa}</p>
+                            <p className="card-vaga-data">
+                              Candidatura em: {new Date(c.dataCadastro).toLocaleDateString('pt-BR')}
+                            </p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               </div>
             )}

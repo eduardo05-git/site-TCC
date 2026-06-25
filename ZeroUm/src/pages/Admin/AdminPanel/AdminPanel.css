@@ -340,6 +340,12 @@
   color: #64748b;
 }
 
+.adm-vaga-empresa-doc {
+  font-size: 0.74rem;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
 .adm-vaga-area {
   font-size: 0.72rem;
   font-weight: 700;
@@ -349,6 +355,31 @@
   border-radius: 999px;
   white-space: nowrap;
   flex-shrink: 0;
+}
+
+.adm-vaga-descricao {
+  font-size: 0.88rem;
+  color: #334155;
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+
+.adm-vaga-detalhes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+  font-size: 0.8rem;
+  color: #475569;
+}
+
+.adm-vaga-detalhes strong {
+  color: #0f172a;
+  font-weight: 700;
 }
 
 .adm-vaga-req {
@@ -397,6 +428,92 @@
 }
 
 .adm-btn-rejeitar:hover { background: #fee2e2; }
+
+.adm-btn-aprovar:disabled, .adm-btn-rejeitar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.adm-erro-box {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  border-radius: 12px;
+  padding: 14px 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.adm-recusa-painel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #fff8f8;
+  border: 1px solid #fecaca;
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-top: 14px;
+}
+
+.adm-recusa-painel label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #c62828;
+}
+
+.adm-recusa-painel textarea {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid #fecaca;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  resize: vertical;
+  outline: none;
+  transition: border-color .2s;
+}
+
+.adm-recusa-painel textarea:focus {
+  border-color: #c62828;
+}
+
+.adm-recusa-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.adm-btn-cancelar-recusa {
+  padding: 9px 16px;
+  border: 1px solid #e2e8f0;
+  background: white;
+  color: #64748b;
+  border-radius: 10px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.adm-btn-cancelar-recusa:hover { background: #f8fafc; }
+
+.adm-btn-confirmar-recusa {
+  padding: 9px 16px;
+  border: none;
+  background-color: #c62828;
+  color: white;
+  border-radius: 10px;
+  font-size: 0.86rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.adm-btn-confirmar-recusa:hover { background-color: #b71c1c; }
+
+.adm-btn-confirmar-recusa:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 
 /* ── TABELA USUÁRIOS ── */
 .adm-table-wrap {
