@@ -1,7 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import './Welcome.css';
+
+const API_BASE = 'http://localhost:8080/api/v1';
+
+const AREA_VISUAL = {
+    'TI / Desenvolvimento': {
+        tag: 'Dev', bg: 'rgba(37,99,235,0.2)', cor: '#93c5fd',
+        icone: <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><polyline points="16 18 22 12 16 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><polyline points="8 6 2 12 8 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>,
+    },
+    'Marketing': {
+        tag: 'Mkt', bg: 'rgba(251,146,60,0.2)', cor: '#fdba74',
+        icone: <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><line x1="18" y1="20" x2="18" y2="10" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="12" y1="20" x2="12" y2="4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="6" y1="20" x2="6" y2="14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>,
+    },
+    'Design': {
+        tag: 'Design', bg: 'rgba(5,150,105,0.2)', cor: '#6ee7b7',
+        icone: <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 19l7-7 3 3-7 7-3-3z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>,
+    },
+    'Administração': {
+        tag: 'Adm', bg: 'rgba(219,39,119,0.2)', cor: '#f9a8d4',
+        icone: <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><circle cx="9" cy="7" r="4" stroke="currentColor" strokeWidth="2"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>,
+    },
+    'Engenharia': {
+        tag: 'Eng', bg: 'rgba(217,119,6,0.2)', cor: '#fcd34d',
+        icone: <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>,
+    },
+    'Outro': {
+        tag: 'Vaga', bg: 'rgba(99,102,241,0.2)', cor: '#a5b4fc',
+        icone: <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><line x1="12" y1="1" x2="12" y2="23" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>,
+    },
+};
+const AREA_VISUAL_PADRAO = AREA_VISUAL['Outro'];
 
 const perfis = [
     {
@@ -56,7 +86,32 @@ export default function Welcome() {
     const [senha, setSenha]     = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError]     = useState('');
+    const [vagasDestaque, setVagasDestaque] = useState([]);
+    const [totalVagas, setTotalVagas] = useState(null);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        Promise.all([
+            axios.get(`${API_BASE}/vaga`, { params: { status: 'APROVADA' } }),
+            axios.get(`${API_BASE}/empresa`),
+        ])
+            .then(([resVagas, resEmpresas]) => {
+                const vagas = resVagas.data;
+                const empresas = resEmpresas.data;
+                setTotalVagas(vagas.length);
+
+                const sorteadas = [...vagas].sort(() => Math.random() - 0.5).slice(0, 3);
+                setVagasDestaque(sorteadas.map(v => {
+                    const empresa = empresas.find(e => e.id === v.empresaId);
+                    return {
+                        ...v,
+                        empresaNome: empresa ? empresa.nome : 'Empresa parceira',
+                        visual: AREA_VISUAL[v.area] || AREA_VISUAL_PADRAO,
+                    };
+                }));
+            })
+            .catch(() => {});
+    }, []);
 
     function handleSelecionarPerfil(p) {
         setPerfil(p); setError(''); setEmail(''); setSenha(''); setStep('login');
@@ -133,14 +188,6 @@ export default function Welcome() {
 
                             <div className="wlc-divider"><span>Primeira vez aqui?</span></div>
                             <Link to="/cadastro" className="wlc-register-btn">Criar conta</Link>
-
-                            {/* Temporário */}
-                            <button className="wlc-skip-btn" onClick={() => {
-                                localStorage.setItem('user', JSON.stringify({ nome: 'Visitante' }));
-                                navigate('/');
-                            }}>
-                                Entrar sem login (temporário)
-                            </button>
                         </div>
                     )}
 
@@ -243,41 +290,23 @@ export default function Welcome() {
                             <span className="wlc-live-dot" />
                             Vagas em destaque
                         </div>
-                        <span className="wlc-cc-header-count">90+ abertas</span>
+                        <span className="wlc-cc-header-count">
+                            {totalVagas === null ? '...' : `${totalVagas} abertas`}
+                        </span>
                     </div>
 
-                    <div className="wlc-cc-vaga">
-                        <div className="wlc-cc-vaga-icon" style={{background:'rgba(37,99,235,0.25)',color:'#93c5fd'}}>
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><polyline points="16 18 22 12 16 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><polyline points="8 6 2 12 8 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    {vagasDestaque.map(v => (
+                        <div className="wlc-cc-vaga" key={v.id}>
+                            <div className="wlc-cc-vaga-icon" style={{ background: v.visual.bg.replace('0.2)', '0.25)'), color: v.visual.cor }}>
+                                {v.visual.icone}
+                            </div>
+                            <div className="wlc-cc-vaga-info">
+                                <p className="wlc-cc-vaga-title">{v.nome}</p>
+                                <p className="wlc-cc-vaga-company">{v.empresaNome} · {v.cidade || v.modalidade || 'Brasil'}</p>
+                            </div>
+                            <span className="wlc-cc-tag" style={{ background: v.visual.bg, color: v.visual.cor }}>{v.visual.tag}</span>
                         </div>
-                        <div className="wlc-cc-vaga-info">
-                            <p className="wlc-cc-vaga-title">Estágio Front-end React</p>
-                            <p className="wlc-cc-vaga-company">Tech Solutions · São Paulo</p>
-                        </div>
-                        <span className="wlc-cc-tag" style={{background:'rgba(37,99,235,0.2)',color:'#93c5fd'}}>Dev</span>
-                    </div>
-
-                    <div className="wlc-cc-vaga">
-                        <div className="wlc-cc-vaga-icon" style={{background:'rgba(5,150,105,0.25)',color:'#6ee7b7'}}>
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 19l7-7 3 3-7 7-3-3z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                        </div>
-                        <div className="wlc-cc-vaga-info">
-                            <p className="wlc-cc-vaga-title">Estágio UI/UX Design</p>
-                            <p className="wlc-cc-vaga-company">Creative Minds · Campinas</p>
-                        </div>
-                        <span className="wlc-cc-tag" style={{background:'rgba(5,150,105,0.2)',color:'#6ee7b7'}}>Design</span>
-                    </div>
-
-                    <div className="wlc-cc-vaga">
-                        <div className="wlc-cc-vaga-icon" style={{background:'rgba(251,146,60,0.25)',color:'#fdba74'}}>
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><line x1="18" y1="20" x2="18" y2="10" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="12" y1="20" x2="12" y2="4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="6" y1="20" x2="6" y2="14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
-                        </div>
-                        <div className="wlc-cc-vaga-info">
-                            <p className="wlc-cc-vaga-title">Estágio em Marketing Digital</p>
-                            <p className="wlc-cc-vaga-company">Growth Pro · Remoto</p>
-                        </div>
-                        <span className="wlc-cc-tag" style={{background:'rgba(251,146,60,0.2)',color:'#fdba74'}}>Mkt</span>
-                    </div>
+                    ))}
                 </div>
 
             </section>

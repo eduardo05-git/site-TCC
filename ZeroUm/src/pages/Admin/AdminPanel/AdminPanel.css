@@ -583,6 +583,18 @@
 .adm-status-badge.ativo   { background: #dcfce7; color: #16a34a; }
 .adm-status-badge.inativo { background: #fee2e2; color: #dc2626; }
 
+.adm-status-pill {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.adm-status-pill.aprovada { background: #dcfce7; color: #16a34a; }
+.adm-status-pill.pendente { background: #fef3c7; color: #b45309; }
+.adm-status-pill.recusada { background: #fee2e2; color: #dc2626; }
+
 .adm-td-actions {
   display: flex;
   gap: 8px;

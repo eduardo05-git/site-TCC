@@ -2,22 +2,13 @@ import React, { useState, useEffect } from 'react';
 
 import axios from 'axios';
 import './Perfil.css';
-import { DropzoneArea } from './DropzoneArea';
 
 const API_BASE_URL = 'http://localhost:8080/api/v1/usuario';
 const API_BASE = 'http://localhost:8080/api/v1';
 
 function statusCandidaturaInfo(status) {
-  switch (status) {
-    case 'APROVADO':
-      return { label: 'Aprovado', classe: 'status-entrou-em-contato' };
-    case 'RECUSADO':
-      return { label: 'Recusado', classe: 'status-recusada' };
-    case 'EM_ANALISE':
-      return { label: 'Em análise', classe: 'status-pendente' };
-    default:
-      return { label: 'Enviada', classe: 'status-pendente' };
-  }
+  if (status === 'VISUALIZADA') return { label: 'Vista pela empresa', classe: 'status-entrou-em-contato' };
+  return { label: 'Enviada', classe: 'status-pendente' };
 }
 
 function Perfil() {
@@ -26,15 +17,17 @@ function Perfil() {
   const [nome, setNome] = useState(usuarioLogado.nome || '');
   const [email, setEmail] = useState(usuarioLogado.email || '');
   const [links, setLinks] = useState('');
+  const [linkCurriculo, setLinkCurriculo] = useState('');
   const [bio, setBio] = useState('');
   const [saving, setSaving] = useState(false);
   const [feedback, setFeedback] = useState('');
 
   // Estado para as habilidades
-  const [skills, setSkills] = useState(['JavaScript', 'React', 'CSS', 'HTML']);
+  const [skills, setSkills] = useState([]);
   const [newSkill, setNewSkill] = useState('');
   const [activeTab, setActiveTab] = useState('dados');
 
+  const [aluno, setAluno] = useState(null);
   const [candidaturas, setCandidaturas] = useState([]);
   const [loadingCandidaturas, setLoadingCandidaturas] = useState(true);
   const [erroCandidaturas, setErroCandidaturas] = useState('');
@@ -51,6 +44,12 @@ function Perfil() {
           setLoadingCandidaturas(false);
           return;
         }
+        setAluno(meuAluno);
+        setBio(meuAluno.bio || '');
+        setLinks(meuAluno.linkPortfolio || '');
+        setLinkCurriculo(meuAluno.linkCurriculo || '');
+        setSkills(meuAluno.habilidades ? meuAluno.habilidades.split(',').map(s => s.trim()).filter(Boolean) : []);
+
         return Promise.all([
           axios.get(`${API_BASE}/candidatura/aluno/${meuAluno.id}`),
           axios.get(`${API_BASE}/vaga`),
@@ -97,9 +96,18 @@ function Perfil() {
     setSaving(true);
     setFeedback('');
     try {
-      const dadosAtualizados = { nome, email };
-      const response = await axios.put(`${API_BASE_URL}/${usuarioLogado.id}`, dadosAtualizados);
+      const response = await axios.put(`${API_BASE_URL}/${usuarioLogado.id}`, { nome, email });
       localStorage.setItem('user', JSON.stringify({ ...usuarioLogado, ...response.data }));
+
+      if (aluno) {
+        await axios.put(`${API_BASE}/aluno/${aluno.id}`, {
+          bio,
+          habilidades: skills.join(', '),
+          linkPortfolio: links,
+          linkCurriculo,
+        });
+      }
+
       setFeedback('Perfil salvo com sucesso!');
       setTimeout(() => setFeedback(''), 3000);
     } catch (err) {
@@ -229,10 +237,14 @@ function Perfil() {
 
               <div className="perfil-section split-section">
                 <div className="perfil-field half-width">
-                  <label>Documento / Currículo</label>
-                  <div className="dropzone-wrapper">
-                    <DropzoneArea />
-                  </div>
+                  <label>Link do Currículo</label>
+                  <input
+                    type="url"
+                    value={linkCurriculo}
+                    onChange={(e) => setLinkCurriculo(e.target.value)}
+                    placeholder="https://drive.google.com/..."
+                  />
+                  <small className="help-text">Cole um link (Google Drive, Canva, etc.) com seu currículo em PDF.</small>
                 </div>
 
                 <div className="perfil-field half-width links-section">

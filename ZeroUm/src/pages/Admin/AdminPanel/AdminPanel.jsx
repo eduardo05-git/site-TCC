@@ -16,6 +16,11 @@ export default function AdminPanel() {
   const [vagaRecusando, setVagaRecusando] = useState(null);
   const [motivo, setMotivo]       = useState('');
   const [processando, setProcessando] = useState(null);
+  const [todasVagas, setTodasVagas] = useState([]);
+  const [loadingTodasVagas, setLoadingTodasVagas] = useState(false);
+  const [erroTodasVagas, setErroTodasVagas] = useState('');
+  const [vagaRemovendo, setVagaRemovendo] = useState(null);
+  const [motivoRemocao, setMotivoRemocao] = useState('');
   const [users, setUsers]         = useState([]);
   const [editingUser, setEditing] = useState(null);
   const [formData, setFormData]   = useState({});
@@ -35,8 +40,23 @@ export default function AdminPanel() {
       .finally(() => setLoadingVagas(false));
   }
 
+  function carregarTodasVagas() {
+    setLoadingTodasVagas(true);
+    setErroTodasVagas('');
+    Promise.all([
+      axios.get(API_VAGA_URL),
+      axios.get(API_EMPRESA_URL),
+    ])
+      .then(([resVagas, resEmpresas]) => {
+        setTodasVagas(resVagas.data);
+        setEmpresas(resEmpresas.data);
+      })
+      .catch(() => setErroTodasVagas('Não foi possível carregar as vagas.'))
+      .finally(() => setLoadingTodasVagas(false));
+  }
+
   useEffect(() => {
-    if (aba === 'usuarios') {
+    if (aba === 'usuarios' || aba === 'overview') {
       axios.get(API_BASE_URL)
         .then(r => setUsers(r.data))
         .catch(() => setUsers([]));
@@ -46,6 +66,9 @@ export default function AdminPanel() {
       axios.get(API_VAGA_URL, { params: { status: 'APROVADA' } })
         .then(r => setTotalAprovadas(r.data.length))
         .catch(() => {});
+    }
+    if (aba === 'todas-vagas') {
+      carregarTodasVagas();
     }
   }, [aba]);
 
@@ -86,6 +109,31 @@ export default function AdminPanel() {
       setMotivo('');
     } catch {
       setErroVagas('Não foi possível recusar a vaga. Tente novamente.');
+    } finally {
+      setProcessando(null);
+    }
+  }
+
+  function abrirRemocao(id) {
+    setVagaRemovendo(id);
+    setMotivoRemocao('');
+  }
+
+  function cancelarRemocao() {
+    setVagaRemovendo(null);
+    setMotivoRemocao('');
+  }
+
+  async function confirmarRemocao(id) {
+    if (!motivoRemocao.trim()) return;
+    setProcessando(id);
+    try {
+      await axios.put(`${API_VAGA_URL}/${id}/recusar`, { motivoRecusa: motivoRemocao.trim() });
+      setTodasVagas(prev => prev.map(v => v.id === id ? { ...v, statusVaga: 'RECUSADA', motivoRecusa: motivoRemocao.trim() } : v));
+      setVagaRemovendo(null);
+      setMotivoRemocao('');
+    } catch {
+      setErroTodasVagas('Não foi possível remover a vaga. Tente novamente.');
     } finally {
       setProcessando(null);
     }
@@ -139,6 +187,10 @@ export default function AdminPanel() {
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="2" y="7" width="20" height="14" rx="2" stroke="currentColor" strokeWidth="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16" stroke="currentColor" strokeWidth="2"/></svg>
             Vagas Pendentes
             {vagas.length > 0 && <span className="adm-badge">{vagas.length}</span>}
+          </button>
+          <button className={`adm-nav-item ${aba === 'todas-vagas' ? 'active' : ''}`} onClick={() => setAba('todas-vagas')}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 7l9-4 9 4-9 4-9-4z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M3 12l9 4 9-4M3 17l9 4 9-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            Vagas
           </button>
           <button className={`adm-nav-item ${aba === 'usuarios' ? 'active' : ''}`} onClick={() => setAba('usuarios')}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><circle cx="9" cy="7" r="4" stroke="currentColor" strokeWidth="2"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
@@ -301,6 +353,82 @@ export default function AdminPanel() {
                       )}
                     </div>
                   );})}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ── TODAS AS VAGAS ── */}
+          {aba === 'todas-vagas' && (
+            <div className="adm-content">
+              <div className="adm-header">
+                <h2>Vagas</h2>
+                <p>{todasVagas.length} vaga{todasVagas.length !== 1 ? 's' : ''} no total — aprovadas, pendentes e recusadas.</p>
+              </div>
+
+              {erroTodasVagas && <div className="adm-erro-box">{erroTodasVagas}</div>}
+
+              {loadingTodasVagas ? (
+                <div className="adm-empty"><p>Carregando vagas...</p></div>
+              ) : todasVagas.length === 0 ? (
+                <div className="adm-empty"><p>Nenhuma vaga cadastrada ainda.</p></div>
+              ) : (
+                <div className="adm-vagas-list">
+                  {todasVagas.map(v => {
+                    const empresa = getEmpresa(v.empresaId);
+                    const statusClasse = v.statusVaga === 'APROVADA' ? 'aprovada' : v.statusVaga === 'RECUSADA' ? 'recusada' : 'pendente';
+                    return (
+                      <div className="adm-vaga-card" key={v.id}>
+                        <div className="adm-vaga-top">
+                          <div>
+                            <p className="adm-vaga-titulo">{v.nome}</p>
+                            <p className="adm-vaga-empresa">{empresa ? empresa.nome : '—'} · Enviado em {new Date(v.dataCadastro).toLocaleDateString('pt-BR')}</p>
+                          </div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <span className={`adm-status-pill ${statusClasse}`}>{v.statusVaga}</span>
+                            <span className="adm-vaga-area">{v.area}</span>
+                          </div>
+                        </div>
+
+                        <p className="adm-vaga-descricao">{v.descricao}</p>
+
+                        {v.statusVaga === 'RECUSADA' && v.motivoRecusa && (
+                          <p className="adm-vaga-req"><strong>Motivo:</strong> {v.motivoRecusa}</p>
+                        )}
+
+                        <div className="adm-vaga-actions">
+                          <button className="adm-btn-rejeitar" disabled={processando === v.id} onClick={() => abrirRemocao(v.id)}>
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0l-1 14a2 2 0 01-2 2H7a2 2 0 01-2-2L4 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                            Remover
+                          </button>
+                        </div>
+
+                        {vagaRemovendo === v.id && (
+                          <div className="adm-recusa-painel">
+                            <label htmlFor={`adm-motivo-remocao-${v.id}`}>Motivo da remoção (a empresa vai ver isso)</label>
+                            <textarea
+                              id={`adm-motivo-remocao-${v.id}`}
+                              rows={2}
+                              placeholder="Explique pra empresa por que a vaga foi removida..."
+                              value={motivoRemocao}
+                              onChange={e => setMotivoRemocao(e.target.value)}
+                              autoFocus
+                            />
+                            <div className="adm-recusa-actions">
+                              <button className="adm-btn-cancelar-recusa" onClick={cancelarRemocao}>Cancelar</button>
+                              <button
+                                className="adm-btn-confirmar-recusa"
+                                disabled={!motivoRemocao.trim() || processando === v.id}
+                                onClick={() => confirmarRemocao(v.id)}
+                              >
+                                {processando === v.id ? 'Removendo...' : 'Confirmar remoção'}
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               )}
             </div>

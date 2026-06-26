@@ -19,9 +19,7 @@ function iniciais(nome) {
 }
 
 function statusCandidaturaInfo(status) {
-  if (status === 'APROVADO') return { label: 'Aprovado', className: 'emp-status-aprovada' };
-  if (status === 'RECUSADO') return { label: 'Recusado', className: 'emp-status-recusada' };
-  if (status === 'EM_ANALISE') return { label: 'Em análise', className: 'emp-status-pendente' };
+  if (status === 'VISUALIZADA') return { label: 'Visualizada', className: 'emp-status-aprovada' };
   return { label: 'Enviada', className: 'emp-status-pendente' };
 }
 
@@ -113,6 +111,19 @@ export default function Empresa() {
       .catch(() => setErroCandidatos('Não foi possível carregar os candidatos.'))
       .finally(() => setLoadingCandidatos(false));
   }, [aba, vagas]);
+
+  async function marcarVisualizada(candidatura) {
+    try {
+      await axios.put(`${API_BASE}/candidatura/${candidatura.id}`, {
+        alunoId: candidatura.alunoId,
+        vagaId: candidatura.vagaId,
+        statusCandidatura: 'VISUALIZADA',
+      });
+      setCandidatos(prev => prev.map(c => c.id === candidatura.id ? { ...c, statusCandidatura: 'VISUALIZADA' } : c));
+    } catch {
+      setErroCandidatos('Não foi possível atualizar o candidato.');
+    }
+  }
 
   function handleEntrar(e) {
     e.preventDefault();
@@ -440,7 +451,13 @@ export default function Empresa() {
                       <p className="emp-cand-curso">{c.curso}</p>
                       <span className="emp-cand-interesse">{c.vagaTitulo}</span>
                     </div>
-                    <span className={`emp-status-badge ${status.className}`} style={{ marginTop: 'auto' }}>{status.label}</span>
+                    <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '6px' }}>
+                      <span className={`emp-status-badge ${status.className}`}>{status.label}</span>
+                      <button className="emp-btn-ghost" onClick={() => navigate(`/perfil-visualizacao/${c.alunoId}`)}>Ver perfil</button>
+                      {c.statusCandidatura !== 'VISUALIZADA' && (
+                        <button className="emp-btn-ghost" onClick={() => marcarVisualizada(c)}>Marcar como visualizada</button>
+                      )}
+                    </div>
                   </div>
                 );
               })}

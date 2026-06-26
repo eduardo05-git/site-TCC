@@ -1,41 +1,63 @@
+import { useState, useEffect } from 'react';
 import './home.css';
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
+import axios from 'axios';
 import estudante from '../../assets/estudante.png';
 
-const vagasDestaque = [
-  {
-    titulo: "Estágio Front-end React",
-    empresa: "Tech Solutions",
-    descricao: "Junte-se ao nosso time ágil desenvolvendo interfaces incríveis de alta performance.",
-    requisitos: "JavaScript ES6, HTML5, CSS3. Mente criativa e facilidade com React.",
-    area: "Desenvolvimento",
-    icone: (
-      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-    )
+const API_BASE = 'http://localhost:8080/api/v1';
+
+const AREA_VISUAL = {
+  'TI / Desenvolvimento': {
+    bg: '#f0fdf4', cor: '#16a34a',
+    icone: <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>,
   },
-  {
-    titulo: "Estágio em Marketing Digital",
-    empresa: "Growth Pro",
-    descricao: "Ajude marcas a quebrarem recordes com estratégias de tráfego pago e social media.",
-    requisitos: "Noções de SEO, Google Ads e ferramentas de análise. Muita criatividade.",
-    area: "Comunicação",
-    icone: (
-      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-    )
+  'Marketing': {
+    bg: '#eff6ff', cor: '#2563eb',
+    icone: <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>,
   },
-  {
-    titulo: "Estágio em UI/UX Design",
-    empresa: "Creative Minds Studio",
-    descricao: "Desenho de protótipos encantadores com foco na jornada absurda do usuário.",
-    requisitos: "Domínio de Figma. Noções básicas de usabilidade. Paixão por cores.",
-    area: "Design",
-    icone: (
-      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>
-    )
-  }
-];
+  'Design': {
+    bg: '#fdf4ff', cor: '#c026d3',
+    icone: <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>,
+  },
+  'Administração': {
+    bg: '#fdf2f8', cor: '#db2777',
+    icone: <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
+  },
+  'Engenharia': {
+    bg: '#fff7ed', cor: '#ea580c',
+    icone: <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></svg>,
+  },
+  'Outro': {
+    bg: '#eef2ff', cor: '#4f46e5',
+    icone: <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>,
+  },
+};
+const AREA_VISUAL_PADRAO = AREA_VISUAL['Outro'];
 
 function Home() {
+  const [vagasDestaque, setVagasDestaque] = useState([]);
+
+  useEffect(() => {
+    Promise.all([
+      axios.get(`${API_BASE}/vaga`, { params: { status: 'APROVADA' } }),
+      axios.get(`${API_BASE}/empresa`),
+    ])
+      .then(([resVagas, resEmpresas]) => {
+        const vagas = resVagas.data;
+        const empresas = resEmpresas.data;
+        const sorteadas = [...vagas].sort(() => Math.random() - 0.5).slice(0, 3);
+        setVagasDestaque(sorteadas.map(v => {
+          const empresa = empresas.find(e => e.id === v.empresaId);
+          return {
+            ...v,
+            empresaNome: empresa ? empresa.nome : 'Empresa parceira',
+            visual: AREA_VISUAL[v.area] || AREA_VISUAL_PADRAO,
+          };
+        }));
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <div className="home-modern-landing">
       {/* 1. HERO VIBRANTE E DINÂMICO */}
@@ -229,30 +251,34 @@ function Home() {
           <p>Oportunidades em destaque abertas essa semana.</p>
         </div>
 
-        <div className="vagas-grid-modern">
-          {vagasDestaque.map((vaga, idx) => (
-            <div className="vaga-modern-card" key={idx}>
-              <div className="vaga-card-header">
-                <div className="vaga-icon-wrap">{vaga.icone}</div>
-                <span className="vaga-area-tag">{vaga.area}</span>
-              </div>
+        {vagasDestaque.length === 0 ? (
+          <p className="vagas-grid-vazio">Novas oportunidades chegando em breve.</p>
+        ) : (
+          <div className="vagas-grid-modern">
+            {vagasDestaque.map((vaga) => (
+              <div className="vaga-modern-card" key={vaga.id}>
+                <div className="vaga-card-header">
+                  <div className="vaga-icon-wrap" style={{ background: vaga.visual.bg, color: vaga.visual.cor }}>{vaga.visual.icone}</div>
+                  <span className="vaga-area-tag">{vaga.area}</span>
+                </div>
 
-              <div className="vaga-card-body">
-                <h3>{vaga.titulo}</h3>
-                <p className="vaga-company">{vaga.empresa}</p>
-                <p className="vaga-desc">{vaga.descricao}</p>
-                <div className="vaga-req">
-                  <strong>Requisitos Básicos:</strong>
-                  <span>{vaga.requisitos}</span>
+                <div className="vaga-card-body">
+                  <h3>{vaga.nome}</h3>
+                  <p className="vaga-company">{vaga.empresaNome}</p>
+                  <p className="vaga-desc">{vaga.descricao}</p>
+                  <div className="vaga-req">
+                    <strong>Requisitos Básicos:</strong>
+                    <span>{vaga.requisitos}</span>
+                  </div>
+                </div>
+
+                <div className="vaga-card-footer">
+                  <Link to="/vagas" className="btn-apply-ghost">Ver Detalhes</Link>
                 </div>
               </div>
-
-              <div className="vaga-card-footer">
-                <Link to="/vagas" className="btn-apply-ghost">Ver Detalhes</Link>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         <div className="view-all-wrapper">
           <Link to="/vagas" className="btn-glow outline">Explorar Todas as Vagas</Link>

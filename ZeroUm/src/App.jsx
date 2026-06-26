@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
@@ -16,26 +16,6 @@ import Dashboard from './pages/Admin/Dashboard/Dashboard.jsx';
 import AdminVagas from './pages/Admin/Vagas/AdminVagas.jsx';
 import Empresa from './pages/Empresa/Empresa.jsx';
 import AdminPanel from './pages/Admin/AdminPanel/AdminPanel.jsx';
-
-function PerfilVisualizacaoWrapper() {
-  const location = useLocation();
-  const { nome, curso, ano, telefone, email, experiencia } = location.state || {};
-
-  if (!nome) {
-    return <p>Nenhum perfil carregado. Por favor, preencha o formulário primeiro.</p>;
-  }
-
-  return (
-    <PerfilVisualizacao
-      nome={nome}
-      curso={curso}
-      ano={ano}
-      telefone={telefone}
-      email={email}
-      experiencia={experiencia}
-    />
-  );
-}
 
 // Layout com Navbar e Footer (apenas para rotas autenticadas)
 function LayoutComNavbar({ children }) {
@@ -61,7 +41,7 @@ function App() {
         <Route
           path="/"
           element={
-            <PrivateRoute>
+            <PrivateRoute role="ESTUDANTE">
               <LayoutComNavbar>
                 <Home />
               </LayoutComNavbar>
@@ -73,7 +53,7 @@ function App() {
         <Route
           path="/vagas"
           element={
-            <PrivateRoute>
+            <PrivateRoute role="ESTUDANTE">
               <LayoutComNavbar>
                 <Vagas />
               </LayoutComNavbar>
@@ -83,7 +63,7 @@ function App() {
         <Route
           path="/perfil"
           element={
-            <PrivateRoute>
+            <PrivateRoute role="ESTUDANTE">
               <LayoutComNavbar>
                 <Perfil />
               </LayoutComNavbar>
@@ -91,12 +71,10 @@ function App() {
           }
         />
         <Route
-          path="/perfil-visualizacao"
+          path="/perfil-visualizacao/:alunoId"
           element={
-            <PrivateRoute>
-              <LayoutComNavbar>
-                <PerfilVisualizacaoWrapper />
-              </LayoutComNavbar>
+            <PrivateRoute role="EMPRESA">
+              <PerfilVisualizacao />
             </PrivateRoute>
           }
         />
@@ -111,8 +89,15 @@ function App() {
           }
         />
 
-        {/* Portal da Empresa — sem autenticação */}
-        <Route path="/empresa" element={<Empresa />} />
+        {/* Portal da Empresa */}
+        <Route
+          path="/empresa"
+          element={
+            <PrivateRoute role="EMPRESA">
+              <Empresa />
+            </PrivateRoute>
+          }
+        />
 
         {/* Painel Admin unificado — sem autenticação de role */}
         <Route path="/admin-panel" element={<AdminPanel />} />

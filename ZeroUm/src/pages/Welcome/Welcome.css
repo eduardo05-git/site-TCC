@@ -300,22 +300,6 @@
     box-shadow: 0 4px 14px rgba(79,70,229,.1);
 }
 
-/* Skip temporário */
-.wlc-skip-btn {
-    background: none;
-    border: none;
-    color: #dde4ef;
-    font-size: 0.75rem;
-    cursor: pointer;
-    font-family: inherit;
-    text-align: center;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    transition: color .18s;
-}
-
-.wlc-skip-btn:hover { color: #94a3b8; }
-
 /* ── Login ── */
 .wlc-login {
     display: flex;
