@@ -235,32 +235,30 @@ function Cadastro() {
 
           {nivelAcesso === 'ESTUDANTE' && (
             <>
-              <div style={{ display: 'flex', gap: '12px' }}>
-                <label className="cadastro-label" style={{ flex: 1 }}>
-                  <span>RM (matrícula)</span>
-                  <input
-                    className="cadastro-input"
-                    type="text"
-                    placeholder="rm12345"
-                    value={rm}
-                    onChange={e => setRm(e.target.value)}
-                    required
-                  />
-                </label>
-                <label className="cadastro-label" style={{ flex: 1 }}>
-                  <span>Data de nascimento</span>
-                  <input
-                    className="cadastro-input"
-                    type="text"
-                    inputMode="numeric"
-                    placeholder="DD/MM/AAAA"
-                    value={dataNascimento}
-                    onChange={e => setDataNascimento(formatarDataDigitada(e.target.value))}
-                    maxLength={10}
-                    required
-                  />
-                </label>
-              </div>
+              <label className="cadastro-label">
+                <span>RM (matrícula)</span>
+                <input
+                  className="cadastro-input"
+                  type="text"
+                  placeholder="rm12345"
+                  value={rm}
+                  onChange={e => setRm(e.target.value)}
+                  required
+                />
+              </label>
+              <label className="cadastro-label">
+                <span>Data de nascimento</span>
+                <input
+                  className="cadastro-input"
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="DD/MM/AAAA"
+                  value={dataNascimento}
+                  onChange={e => setDataNascimento(formatarDataDigitada(e.target.value))}
+                  maxLength={10}
+                  required
+                />
+              </label>
 
               <label className="cadastro-label">
                 <span>Curso</span>
