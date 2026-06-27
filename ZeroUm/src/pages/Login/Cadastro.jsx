@@ -109,7 +109,11 @@ function Cadastro() {
 
       navigate('/login');
     } catch (err) {
-      setError('Erro no cadastro. Verifique os dados ou se o e-mail já existe.');
+      if (err.response?.status === 409) {
+        setError(err.response.data || 'E-mail já cadastrado.');
+      } else {
+        setError('Erro no cadastro. Verifique os dados e tente novamente.');
+      }
       console.error('Erro no cadastro:', err);
     } finally {
       setIsLoading(false);
