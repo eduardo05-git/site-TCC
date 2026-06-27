@@ -37,11 +37,8 @@ function statusInfo(status) {
 export default function Empresa() {
   const navigate = useNavigate();
   const usuarioLogado = JSON.parse(localStorage.getItem('user') || '{}');
-  const jaLogado = usuarioLogado.nivelAcesso === 'EMPRESA';
+  const nomeEmpresa = usuarioLogado.nome || '';
 
-  const [step, setStep]           = useState(jaLogado ? 'dashboard' : 'gate');
-  const [nomeEmpresa, setNome]    = useState(usuarioLogado.nome || '');
-  const [senha, setSenha]         = useState('');
   const [aba, setAba]             = useState('vagas');
 
   const [empresaId, setEmpresaId]   = useState(null);
@@ -61,7 +58,6 @@ export default function Empresa() {
 
   // Descobre o id da empresa do usuário logado
   useEffect(() => {
-    if (!jaLogado) return;
     axios.get(`${API_BASE}/empresa`)
       .then(res => {
         const minhaEmpresa = res.data.find(e => e.usuarioId === usuarioLogado.id);
@@ -69,7 +65,7 @@ export default function Empresa() {
         else setErroVagas('Não encontramos o cadastro da sua empresa.');
       })
       .catch(() => setErroVagas('Não foi possível conectar ao servidor.'));
-  }, [jaLogado]);
+  }, []);
 
   function carregarVagas(id) {
     setLoadingVagas(true);
@@ -125,11 +121,6 @@ export default function Empresa() {
     }
   }
 
-  function handleEntrar(e) {
-    e.preventDefault();
-    if (nomeEmpresa.trim() && senha.trim()) setStep('dashboard');
-  }
-
   function handleForm(e) {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
   }
@@ -183,47 +174,10 @@ export default function Empresa() {
     }
   }
 
-  /* ── GATE ── */
-  if (step === 'gate') return (
-    <div className="emp-gate-page">
-      <div className="emp-gate-card">
-        <button type="button" className="emp-gate-back" onClick={() => navigate('/welcome')}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-            <path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-          Voltar
-        </button>
-
-        <div className="emp-gate-logo">Neway</div>
-        <h1>Acesso Empresas</h1>
-        <p>Entre com os dados da sua empresa para gerenciar vagas e candidatos.</p>
-
-        <form onSubmit={handleEntrar} className="emp-gate-form">
-          <div className="emp-field">
-            <label>Nome da empresa</label>
-            <input
-              type="text"
-              placeholder="Ex: Tech Solutions"
-              value={nomeEmpresa}
-              onChange={e => setNome(e.target.value)}
-              required
-            />
-          </div>
-          <div className="emp-field">
-            <label>Senha</label>
-            <input
-              type="password"
-              placeholder="••••••••"
-              value={senha}
-              onChange={e => setSenha(e.target.value)}
-              required
-            />
-          </div>
-          <button type="submit" className="emp-btn-primary">Entrar no portal</button>
-        </form>
-      </div>
-    </div>
-  );
+  function handleSair() {
+    localStorage.removeItem('user');
+    navigate('/welcome');
+  }
 
   /* ── DASHBOARD ── */
   return (
@@ -256,7 +210,7 @@ export default function Empresa() {
           </button>
         </nav>
 
-        <button className="emp-sair" onClick={() => setStep('gate')}>
+        <button className="emp-sair" onClick={handleSair}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
           Sair
         </button>

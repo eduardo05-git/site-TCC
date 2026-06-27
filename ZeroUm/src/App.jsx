@@ -99,8 +99,15 @@ function App() {
           }
         />
 
-        {/* Painel Admin unificado — sem autenticação de role */}
-        <Route path="/admin-panel" element={<AdminPanel />} />
+        {/* Painel Admin unificado */}
+        <Route
+          path="/admin-panel"
+          element={
+            <PrivateRoute role="ADMIN">
+              <AdminPanel />
+            </PrivateRoute>
+          }
+        />
 
         {/* Rotas admin (protegidas pelo AdminRoute) */}
         <Route

@@ -121,16 +121,12 @@ export default function Welcome() {
     async function handleLogin(e) {
         e.preventDefault(); setLoading(true); setError('');
 
-        if (perfil.tipo === 'ADMIN') {
-            navigate('/admin-panel');
-            return;
-        }
-
         try {
             const res = await axios.post(API_LOGIN_URL, { email, senha, nivelAcesso: perfil.tipo });
             if (res.status === 200 && res.data) {
                 localStorage.setItem('user', JSON.stringify(res.data));
-                if (res.data.nivelAcesso === 'EMPRESA') navigate('/empresa');
+                if (res.data.nivelAcesso === 'ADMIN') navigate('/admin-panel');
+                else if (res.data.nivelAcesso === 'EMPRESA') navigate('/empresa');
                 else navigate('/');
             }
         } catch (err) {
