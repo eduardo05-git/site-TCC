@@ -288,8 +288,8 @@ function Home() {
       {/* 4. DEPOIMENTOS */}
       <section className="depo-section">
         <div className="depo-header">
-          <div className="how-label">Histórias reais</div>
-          <h2>Quem já decolou pelo Neway</h2>
+          <div className="how-label">Bastidores</div>
+          <h2>Quem fez e por que criamos o Neway</h2>
         </div>
 
         <div className="depo-layout">
@@ -301,18 +301,18 @@ function Home() {
               </svg>
             </div>
             <p className="depo-text">
-              Eu não acreditava que conseguiria um estágio ainda no 2º ano. O Neway me conectou com a TechFlow em menos de duas semanas. Hoje sou estagiário de Front-end e já estou contribuindo em projetos reais.
+              Nos sites normais só pedem experiência que a gente não tem, e na escola os avisos ficam perdidos. Faltava um lugar feito pra realidade de quem faz curso técnico.
             </p>
             <div className="depo-author">
               <div className="depo-avatar depo-avatar-blue">MR</div>
               <div>
                 <strong>Mateus Rocha</strong>
-                <span>Desenvolvimento Web · TechFlow</span>
+                <span>Aluno da Fieb Belval</span>
               </div>
             </div>
             <div className="depo-badge">
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-              Contratado em 12 dias
+              Dor 100% validada com a turma
             </div>
           </div>
 
@@ -320,26 +320,26 @@ function Home() {
           <div className="depo-stack">
             <div className="depo-card">
               <p className="depo-text-sm">
-                "A plataforma é muito mais simples do que os outros portais. Publiquei meu perfil, apliquei pra três vagas e fui chamada pra entrevista na mesma semana."
+                "A insatisfação com os métodos antigos abriu espaço para inovar. Vimos que criar uma plataforma própria não era só um projeto de aula, mas sim a solução para uma dor real da nossa turma."
               </p>
               <div className="depo-author-sm">
-                <div className="depo-avatar depo-avatar-purple">AL</div>
+                <div className="depo-avatar depo-avatar-purple">EE</div>
                 <div>
-                  <strong>Ana Lima</strong>
-                  <span>Design UX · Creative Minds</span>
+                  <strong>Eduardo Silva</strong>
+                  <span>Front-end React</span>
                 </div>
               </div>
             </div>
 
             <div className="depo-card depo-card-dark">
               <p className="depo-text-sm">
-                "Achei que estágio em TI pra quem está no ensino médio era impossível. O Neway prova que não. Hoje trabalho com infraestrutura e aprendo mais do que na teoria."
+                "As empresas da região perdem talentos incríveis por burocracia no recrutamento. O objetivo foi encurtar esse caminho e provar que estamos mais do que preparados para encarar desafios reais no mercado."
               </p>
               <div className="depo-author-sm">
-                <div className="depo-avatar depo-avatar-green">FS</div>
+                <div className="depo-avatar depo-avatar-green">MM</div>
                 <div>
-                  <strong>Felipe Santos</strong>
-                  <span>TI Infraestrutura · InfraTech</span>
+                  <strong>Marcelo Maia</strong>
+                  <span>Banco de Dados e idealização </span>
                 </div>
               </div>
             </div>
