@@ -257,7 +257,7 @@ export default function Welcome() {
                     )}
                 </div>
 
-                <p className="wlc-legal">© 2025 Neway · Todos os direitos reservados</p>
+                <p className="wlc-legal">© 2026 Neway · Todos os direitos reservados</p>
             </aside>
 
             {/* ════════════ DIREITA ════════════ */}

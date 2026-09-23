@@ -436,18 +436,23 @@ export default function Empresa() {
             <div>
               <p className="emp-footer-title">Contato</p>
               <p>contato@newayestagios.com</p>
-              <p>(11) 99999-9999</p>
+              <p>(11) 98260-5660</p>
               <p>Jardim Belval, Barueri - SP</p>
             </div>
             <div>
               <p className="emp-footer-title">Siga-nos</p>
-              <p>@newayestagios</p>
-              <p>@newayestagios</p>
-              <p>@newayestagios</p>
+               <a 
+                    href="https://www.instagram.com/newayestagios" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    aria-label="Instagram"
+                    >
+                    <i className="fab fa-instagram"></i> @newayestagios
+                    </a>
             </div>
           </div>
           <div className="emp-footer-bottom">
-            <span>© 2025 Portal de Estágios Neway</span>
+            <span>© 2026 Portal de Estágios Neway</span>
             <span>Política de Privacidade</span>
           </div>
           <div className="emp-footer-giant">neway</div>
