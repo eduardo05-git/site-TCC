@@ -144,18 +144,18 @@ function Cadastro() {
             </p>
           )}
 
-          <label className="cadastro-label">
-            <span>Nome completo</span>
-            <input
-              className="cadastro-input"
-              type="text"
-              placeholder="Seu nome completo"
-              value={nome}
-              onChange={e => setNome(e.target.value)}
-              required
-              autoFocus
-            />
-          </label>
+                  <label className="cadastro-label">
+          <span>{nivelAcesso === 'EMPRESA' ? 'Nome da empresa' : 'Nome completo'}</span>
+          <input
+            className="cadastro-input"
+            type="text"
+            placeholder={nivelAcesso === 'EMPRESA' ? 'Nome da sua empresa' : 'Seu nome completo'}
+            value={nome}
+            onChange={e => setNome(e.target.value)}
+            required
+            autoFocus
+          />
+        </label>
 
           <label className="cadastro-label">
             <span>E-mail</span>
